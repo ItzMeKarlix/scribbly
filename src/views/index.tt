@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scribbly Workspace</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="profile">
+        <img src="avatar.jpg" alt="Profile" class="avatar" />
+        <h3>Karl Eriel Atabay</h3>
+        <p>karleriel.atabay@cvsu.edu.ph</p>
+        <button class="new-project-btn">+ New Project</button>
+      </div>
+      <nav>
+        <ul class="menu">
+          <li><span>🔍</span> Search</li>
+          <li><span>🏠</span> Home</li>
+          <li><span>📝</span> Notes</li>
+          <li><span>✔️</span> Tasks</li>
+          <li class="projects">
+            <span>📁 Projects</span>
+            <ul class="sub-projects">
+              <li><span class="dot red"></span> Project Note 1</li>
+              <li><span class="dot blue"></span> Project Note 2</li>
+              <li><span class="dot cyan"></span> Project Note 3</li>
+              <li><span class="dot yellow"></span> Project Note 4</li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <div class="top-bar">
+        <p>Projects / Project Name 1 / Scribbly Workspace</p>
+        <div class="actions">
+          <button>🖨 Print</button>
+          <button>🔗 Share</button>
+          <button class="download">⬇ Download</button>
+        </div>
+      </div>
+      <div class="editor-toolbar">
+        <button><b>B</b></button>
+        <button><i>I</i></button>
+        <button><s>S</s></button>
+        <button>H₁</button>
+        <button>H₂</button>
+        <button>H₃</button>
+      </div>
+      <div class="editor-content">
+        <h1>Lorem Ipsum</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed
+          pulvinar nibh. Vestibulum congue ornare leo...
+        </p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

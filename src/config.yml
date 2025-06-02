@@ -1,0 +1,23 @@
+# Dancer2 configuration file
+
+# Use 'Simple' template engine so we can just use plain .html
+template: "simple"
+
+# Default layout (not used in 'simple', but harmless)
+layout: "main"
+
+# Location of your static assets like CSS, JS, images
+public_dir: "public"
+
+# Logging settings (optional)
+logger: "console"
+log: "debug"
+
+# Charset for responses
+charset: "UTF-8"
+
+# Session engine (optional if you're not using sessions)
+# session: "YAML"
+
+# Environment name (can be development, production, etc.)
+environment: "development"
