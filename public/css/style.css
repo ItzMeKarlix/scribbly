@@ -1,0 +1,186 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.sidebar {
+  width: 350px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ccc;
+  padding: 20px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.profile-text h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.profile-text p {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.profile-text a {
+  text-decoration: none;
+  color: #888;
+}
+
+/* .new-project-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+} */
+
+.new-project-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  margin: 15px 0;
+  cursor: pointer;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-header {
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.sub-projects {
+  margin-left: 26px;
+  margin-top: 5px;
+  font-size: 0.95em;
+  color: #333;
+}
+.sub-projects li {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+}
+
+
+.dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.red { background-color: red; }
+.blue { background-color: dodgerblue; }
+.cyan { background-color: cyan; }
+.yellow { background-color: yellow; }
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+.actions button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.actions .download {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.editor-toolbar button {
+  padding: 6px 10px;
+  border: none;
+  background: #f2f2f2;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.editor-content h1 {
+  margin-bottom: 10px;
+}
+
+.editor-content p {
+  line-height: 1.6;
+  color: #333;
+}
+
+.material-icons {
+  vertical-align: middle;
+  font-size: 18px;
+}
