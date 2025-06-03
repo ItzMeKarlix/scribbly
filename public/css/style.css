@@ -6,9 +6,19 @@
   font-family: 'Poppins', sans-serif;
 }
 
-body, html {
+html, body {
+  margin: 0;
+  padding: 0;
   height: 100%;
+  font-family: "Poppins", sans-serif;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 
 /* ========= LOGIN PAGE ========= */
 .login-page {
@@ -119,7 +129,7 @@ body, html {
 }
 
 /* ========= WORKSPACE ========= */
-body.workspace-page {
+.Workspace-page {
   display: flex;
   height: 100vh;
 }
@@ -200,34 +210,90 @@ body.workspace-page {
 
 .menu {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .menu li {
   margin: 15px 0;
   cursor: pointer;
-  align-items: center;
   gap: 8px;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+  display: flex;
+  align-items: center;
+  transition: color 0.3s, transform 0.3s;
 }
 
+.menu li:hover {
+  color: #007bff;
+  transform: translateX(5px);
+}
+
+.menu li .material-icons {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.menu li:hover .material-icons {
+  transform: scale(1.2);
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Projects folder */
+.projects {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+}
+
+/* Project header - now inline like other items */
 .project-header {
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: bold;
-  margin-top: 10px;
+  cursor: pointer;
 }
 
+/* Sub-projects hidden initially */
 .sub-projects {
   margin-left: 26px;
   margin-top: 5px;
   font-size: 0.95em;
   color: #333;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  pointer-events: none;
 }
+  
+/* Show sub-projects when active */
+.projects.active .sub-projects {
+  max-height: 500px;
+  opacity: 1;
+  pointer-events: all;
+}
+
 .sub-projects li {
   margin: 4px 0;
   display: flex;
   align-items: center;
 }
+
+/* ------ */
 
 .dot {
   height: 10px;
