@@ -6,6 +6,12 @@
   <title>Scribbly Workspace</title>
   <link rel="stylesheet" href="/css/style.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script>
+  function toggleProjects() {
+    const projectsItem = document.querySelector('.projects');
+    projectsItem.classList.toggle('active');
+  }
+  </script>
 </head>
 <body class="Workspace-page">
   <div class="container">
@@ -24,12 +30,14 @@
       </div>
       <nav>
         <ul class="menu">
-          <li><span class="material-icons">search</span> Search</li>
-          <li><span class="material-icons">home</span> Home</li>
-          <li><span class="material-icons">note</span> Notes</li>
-          <li><span class="material-icons">check</span> Tasks</li>
-          <li class="projects">
-            <span class="material-icons">folder</span> Projects 
+          <li style="--i: 1"><span class="material-icons">search</span> Search</li>
+          <li style="--i: 2"><span class="material-icons">home</span> Home</li>
+          <li style="--i: 3"><span class="material-icons">note</span> Notes</li>
+          <li style="--i: 4"><span class="material-icons">check</span> Tasks</li>
+          <li class="projects" style="--i: 5;">
+            <div class="project-header" onclick="toggleProjects()">
+              <span class="material-icons">folder</span> Projects
+            </div>
             <ul class="sub-projects">
               <li><span class="dot red"></span> Project Note 1</li>
               <li><span class="dot blue"></span> Project Note 2</li>
