@@ -1,0 +1,232 @@
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar UI */
+
+.sidebar {
+  width: 300px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ccc;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px; 
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-text h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile-text p,
+.profile-text a {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 2px 0 0 0;
+  word-break: break-word;
+}
+
+.new-project-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.new-project-btn:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 14px rgba(0, 123, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.new-project-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu > li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+  opacity: 1 !important; /* Override opacity:0 so all menu items are visible */
+  transform: none !important; /* Override translateX for menu items */
+}
+
+.menu > li:hover {
+  color: #007bff;
+  transform: translateX(5px);
+}
+
+.material-icons {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.menu > li:hover .material-icons {
+  transform: scale(1.2);
+}
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; 
+}
+
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  margin: 0; 
+  width: 100%;
+  cursor: pointer; 
+}
+
+.projects .sub-projects {
+  list-style: none;
+  padding-left: 30px;
+  margin: 0;
+  display: none;
+}
+
+.projects.open .sub-projects {
+  display: block;
+}
+
+
+.sub-projects li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.red { background-color: red; }
+.blue { background-color: blue; }
+.cyan { background-color: cyan; }
+.yellow { background-color: gold; }
+
+/* Content Note Taking UI */
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+.actions button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.actions .download {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.editor-toolbar button {
+  padding: 6px 10px;
+  border: none;
+  background: #f2f2f2;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.editor-toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+.editor-toolbar button.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.editor-content h1 {
+  margin-bottom: 10px;
+}
+
+.editor-content p {
+  line-height: 1.6;
+  color: #333;
+}
+
+.material-icons {
+  vertical-align: middle;
+  font-size: 18px;
+  color: inherit; 
+}

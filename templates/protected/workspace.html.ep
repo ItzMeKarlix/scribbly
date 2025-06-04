@@ -1,0 +1,63 @@
+% layout 'workspace_layout';
+% title 'Scribbly Workspace';
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="profile-info">
+        <img src="img/avatar.png" alt="Profile" class="avatar" />
+        <div class="profile-text">
+          <h3>Karl Eriel Atabay</h3>
+          <p>
+            <a href="mailto:karleriel.atabay@cvsu.edu.ph">
+              karleriel.atabay@cvsu.edu.ph
+            </a>
+          </p>
+        </div>
+      </div>
+      <button class="new-project-btn">
+        <span class="material-icons">add</span> New Project
+      </button>
+    </div>
+
+    <nav>
+      <ul class="menu">
+        <li style="--i: 1"><span class="material-icons">search</span>Search</li>
+        <li style="--i: 2"><span class="material-icons">home</span>Home</li>
+        <li style="--i: 3"><span class="material-icons">note</span>Notes</li>
+        <li style="--i: 4"><span class="material-icons">check</span>Tasks</li>
+        <li class="projects" style="--i: 5">
+		  <div class="project-header" onclick="toggleProjects()">
+		    <span class="material-icons">folder</span> Projects
+		  </div>
+		  <ul class="sub-projects">
+		    <li><span class="dot red"></span> Project Note 1</li>
+		    <li><span class="dot blue"></span> Project Note 2</li>
+		    <li><span class="dot cyan"></span> Project Note 3</li>
+		    <li><span class="dot yellow"></span> Project Note 4</li>
+		  </ul>
+		</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="content">
+	  <div class="top-bar">
+	    <p>Projects / Project Name 1 / Scribbly Workspace</p>
+	    <div class="actions">
+	      <button><span class="material-icons">print</span> Print</button>
+	      <button><span class="material-icons">share</span> Share</button>
+	      <button class="download"><span class="material-icons">download</span> Download</button>
+	    </div>
+	  </div>
+	  <div class="editor-toolbar">
+		  <button data-cmd="toggleBold">B</button>
+		  <button data-cmd="toggleItalic"><i>I</i></button>
+		  <button data-cmd="toggleStrike"><s>S</s></button>
+		  <button data-cmd="toggleHeading" data-level="1">H₁</button>
+		  <button data-cmd="toggleHeading" data-level="2">H₂</button>
+		  <button data-cmd="toggleHeading" data-level="3">H₃</button>
+		</div>
+		<div id="editor"></div>
+  </main>
+</div>

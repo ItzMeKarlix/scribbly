@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title><%= title || 'Scribbly' %></title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  %= content
+</body>
+</html>

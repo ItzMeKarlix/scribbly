@@ -1,0 +1,31 @@
+% layout 'default_layout';
+% title 'Login';
+
+<div class="login-container">
+  <div class="left-section">
+    <!-- Optional: You can add content here if needed -->
+  </div>
+  <div class="right-section">
+    <div class="login-box">
+      <h1>Nice to see you again!</h1>
+      <form method="POST" action="/login">
+        <div class="input-group">
+          <input type="text" name="username" placeholder="Username" required />
+        </div>
+        <div class="input-group">
+          <input type="password" name="password" placeholder="Password" required />
+        </div>
+        <div class="options">
+          <label>
+            <input type="checkbox" name="remember" />
+            Remember
+          </label>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+      <hr/>
+      <p>Don't have an account? <a href="/register">Sign up now</a></p>
+    </div>
+  </div>
+</div>

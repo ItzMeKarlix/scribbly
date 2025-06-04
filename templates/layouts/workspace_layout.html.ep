@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title><%= title || 'Scribbly' %></title>
+  <link rel="stylesheet" href="/css/workspace.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script src="https://esm.sh/@tiptap/core@2.0.3" type="module"></script>
+  <script src="https://esm.sh/@tiptap/starter-kit@2.0.3" type="module"></script>
+</head>
+<body>
+  %= content
+  <script type="module" src="js/workspace.js"></script>
+</body>
+</html>
