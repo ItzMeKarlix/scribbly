@@ -1,37 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .container {
   display: flex;
   width: 100%;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
 }
 
 /* Sidebar UI */
 
 .sidebar {
-  width: 300px;
+  width: 350px;
   background-color: #f4f4f4;
   border-right: 1px solid #ccc;
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .profile {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 10px;
 }
 
 .profile-info {
   display: flex;
   align-items: center;
-  text-align: center;
 }
 
 .avatar {
-  width: 96px;
-  height: 96px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 12px; 
@@ -54,31 +73,31 @@
   font-size: 0.9rem;
   color: #666;
   margin: 2px 0 0 0;
-  word-break: break-word;
+  text-decoration: none;  
+
 }
 
 .new-project-btn {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
   background-color: #007bff;
-  color: #fff;
-  font-weight: bold;
+  color: white;
+  border: none;
+  padding: 10px 100px;
+  border-radius: 6px;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  transition: 
+    background-color 0.3s ease, 
+    box-shadow 0.3s ease, 
+    transform 0.2s ease;
 }
 
+/* Hover effect: lift and shadow */
 .new-project-btn:hover {
   background-color: #0056b3;
   box-shadow: 0 6px 14px rgba(0, 123, 255, 0.3);
   transform: translateY(-2px);
 }
 
+/* Click (active) effect: press down */
 .new-project-btn:active {
   transform: scale(0.98);
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
@@ -90,65 +109,82 @@
   margin: 0;
 }
 
-.menu > li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+.menu li {
+  margin: 15px 0;
   cursor: pointer;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+  display: flex;
   transition: color 0.3s, transform 0.3s;
-  opacity: 1 !important; /* Override opacity:0 so all menu items are visible */
-  transform: none !important; /* Override translateX for menu items */
 }
 
-.menu > li:hover {
+.menu li:hover {
   color: #007bff;
   transform: translateX(5px);
 }
 
-.material-icons {
-  font-size: 20px;
+.menu li .material-icons {
+  margin-right: 8px;
   transition: transform 0.3s ease;
 }
 
-.menu > li:hover .material-icons {
+.menu li:hover .material-icons {
   transform: scale(1.2);
 }
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Projects folder */
 .projects {
   display: flex;
   flex-direction: column;
-  gap: 4px; 
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+  
 }
 
+/* Project header - now inline like other items */
 .project-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0;
-  margin: 0; 
-  width: 100%;
-  cursor: pointer; 
+  gap: 8px;
+  cursor: pointer;
 }
 
-.projects .sub-projects {
-  list-style: none;
-  padding-left: 30px;
-  margin: 0;
-  display: none;
+/* Sub-projects hidden initially */
+.sub-projects {
+  margin-left: 26px;
+  margin-top: 5px;
+  font-size: 0.95em;
+  color: #333;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  pointer-events: none;
 }
-
-.projects.open .sub-projects {
-  display: block;
+  
+/* Show sub-projects when active */
+.projects.active .sub-projects {
+  max-height: 500px;
+  opacity: 1;
+  pointer-events: all;
 }
-
 
 .sub-projects li {
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+  margin: 4px 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #555;
 }
 
 .dot {
@@ -219,7 +255,9 @@
 .editor-content h1 {
   margin-bottom: 10px;
 }
-
+.content:focus {
+  outline: none;
+}
 .editor-content p {
   line-height: 1.6;
   color: #333;

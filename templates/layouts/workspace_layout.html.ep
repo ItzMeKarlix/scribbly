@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title><%= title || 'Scribbly' %></title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="stylesheet" href="/css/workspace.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <script src="https://esm.sh/@tiptap/core@2.0.3" type="module"></script>

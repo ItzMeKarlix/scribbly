@@ -3,7 +3,7 @@
 
 <div class="login-container">
   <div class="left-section">
-    <!-- Optional: You can add content here if needed -->
+    <img src="img/loginphoto.png" alt="login placeholder">
   </div>
   <div class="right-section">
     <div class="login-box">

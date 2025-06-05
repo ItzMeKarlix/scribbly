@@ -1,5 +1,5 @@
 import { Editor } from 'https://esm.sh/@tiptap/core@2.0.3'
-import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.3'
+import StarterKit from 'https://esm.sh/@tiptap  /starter-kit@2.0.3'
 
 const editor = new Editor({
   element: document.querySelector('#editor'),
@@ -29,5 +29,5 @@ document.querySelectorAll('.editor-toolbar button').forEach(button => {
 
 window.toggleProjects = function () {
   const projectsItem = document.querySelector('.projects')
-  projectsItem.classList.toggle('open')
+  projectsItem.classList.toggle('active')
 }

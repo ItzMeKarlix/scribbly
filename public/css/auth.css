@@ -19,7 +19,7 @@
 }
 
 .left-section {
-/*  background-image: url("3.jpg");*/
+  background-image: url("loginphoto.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -89,6 +89,7 @@
   opacity: 0.9;
 }
 
+
 hr {
   color: lightgray;
   margin-top: 10px;
@@ -103,3 +104,4 @@ p a {
   text-decoration: none;
   color: darkblue;
 }
+

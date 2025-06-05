@@ -51,7 +51,7 @@ sub routes {
             $c->render(text => 'Invalid credentials.');
         }
     });
-
+    
     $r->get('/dashboard')->to(cb => sub {
         my $c = shift;
         return $c->redirect_to('/login') unless $c->session('user_id');

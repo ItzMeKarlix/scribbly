@@ -43,7 +43,7 @@ post '/login' => sub {
     my $user = Model::validate_login($username, $password);
     if ($user) {
         $c->session(user_id => $user->{id});
-        $c->redirect_to('/dashboard');
+        $c->redirect_to('/workspace');
     } else {
         $c->render(text => 'Invalid credentials.');
     }
