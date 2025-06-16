@@ -136,15 +136,16 @@ if (window.noteTitle) {
 }
 
 // On new note, clear currentNoteId so save will create a new note
-newNoteBtn.addEventListener('click', () => {
-  currentNoteId = null;
-  titleInput.value = '';
-  editor.commands.setContent('');
-  saveBtn.disabled = true;
-  saveBtn.classList.remove('highlighted');
-  // Remove note_id from URL
-  window.history.replaceState({}, document.title, window.location.pathname);
-});
+if (newNoteBtn) {
+  newNoteBtn.addEventListener('click', () => {
+    currentNoteId = null;
+    titleInput.value = '';
+    editor.commands.setContent('');
+    saveBtn.disabled = true;
+    saveBtn.classList.remove('highlighted');
+    // Do not remove note_id from URL, let backend handle new note route
+  });
+}
 
 // Update save logic to only create new note if currentNoteId is null, otherwise edit
 saveBtn.addEventListener('click', async () => {

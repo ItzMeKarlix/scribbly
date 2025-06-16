@@ -10,7 +10,7 @@
           </p>
         </div>
       </div>
-      <button class="new-project-btn">
+      <button class="new-project-btn" onclick="window.location.href='/workspace-new'">
         <span class="material-icons">add</span> New Note
       </button>
     </div>
@@ -37,24 +37,24 @@
   </aside>
 
   <main class="content">
-    <div class="top-bar">
-      <input id="note-title" class="note-title-input" type="text" placeholder="Title..." value="<%= $note_title // '' %>"  />
-      <div class="actions">
+	  <div class="top-bar">
+	    <input id="note-title" class="note-title-input" type="text" placeholder="Title...">
+	    <div class="actions">
         <button class="print" disabled><span class="material-icons">print</span> Print</button>
         <button class="share" disabled><span class="material-icons">share</span> Share</button>
         <button class="download" disabled><span class="material-icons">download</span> Download</button>
         <button class="save highlighted" disabled><span class="material-icons">save</span> Save</button>
-      </div>
-    </div>
-    <div class="editor-toolbar">
-      <button data-cmd="toggleBold">B</button>
-      <button data-cmd="toggleItalic"><i>I</i></button>
-      <button data-cmd="toggleStrike"><s>S</s></button>
-      <button data-cmd="toggleHeading" data-level="1">H₁</button>
-      <button data-cmd="toggleHeading" data-level="2">H₂</button>
-      <button data-cmd="toggleHeading" data-level="3">H₃</button>
-    </div>
-    <div id="editor"></div>
+	    </div>
+	  </div>
+	  <div class="editor-toolbar">
+		  <button data-cmd="toggleBold">B</button>
+		  <button data-cmd="toggleItalic"><i>I</i></button>
+		  <button data-cmd="toggleStrike"><s>S</s></button>
+		  <button data-cmd="toggleHeading" data-level="1">H₁</button>
+		  <button data-cmd="toggleHeading" data-level="2">H₂</button>
+		  <button data-cmd="toggleHeading" data-level="3">H₃</button>
+		</div>
+		<div id="editor"></div>
   </main>
 
 </div>

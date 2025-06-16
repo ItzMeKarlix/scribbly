@@ -1,5 +1,6 @@
 % layout 'dashboard_layout';
 % title 'Dashboard';
+
 <div class="container">
   <aside class="sidebar">
     <div class="profile">
@@ -8,7 +9,7 @@
             <h3><%= $username %></h3>
         </div>
       </div>
-      <button class="new-project-btn" onclick="window.location.href='/workspace'">
+      <button class="new-project-btn" onclick="window.location.href='/workspace-new'">
         <span class="material-icons">add</span> New Note
       </button>
     </div>
@@ -39,7 +40,7 @@
     <div class="top-bar">
       <p>Dashboard</p>
       <div class="actions">
-        <button id="undo-all-btn" style="background:#f44336;color:white;">Dekete All Notes</button>
+        <button id="undo-all-btn" style="background:#f44336;color:white;">Delete All Notes</button>
       </div>
     </div>
 
@@ -105,10 +106,10 @@ async function deleteNote(id) {
   }
 }
 document.getElementById('undo-all-btn').onclick = async function() {
-  if (!confirm('This will delete ALL your notes. Continue?')) return;
+  if (!confirm('This will permanently delete ALL your notes. Continue?')) return;
   const res = await fetch('/delete-all-notes', { method: 'POST' });
   const result = await res.json();
   if (result.success) location.reload();
-  else alert('Failed to undo all.');
+  else alert('Failed to delete all notes.');
 }
 </script>

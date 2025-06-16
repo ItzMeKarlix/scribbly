@@ -91,7 +91,7 @@ a {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 100px;
+  padding: 10px 109px;
   border-radius: 6px;
   cursor: pointer;
   transition: 
@@ -307,7 +307,7 @@ a {
 .notes-masonry {
   display: flex;
   gap: 18px;
-  margin: 0 40px;
+  margin: 0 20px;
 }
 
 .notes-masonry-col {
