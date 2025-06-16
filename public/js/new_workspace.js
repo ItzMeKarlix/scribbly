@@ -149,31 +149,39 @@ newNoteBtn.addEventListener('click', () => {
 // Update save logic to only create new note if currentNoteId is null, otherwise edit
 saveBtn.addEventListener('click', async () => {
   const title = titleInput.value;
-  const text = editor.getHTML();
-  if (text.trim() === '' || title.trim() === '') return;
+  const html = editor.getHTML(); // Save HTML for WYSIWYG
+  const json = editor.getJSON(); // Save JSON for future-proofing
+  if (editor.getText().trim() === '' || title.trim() === '') return;
   try {
     const response = await fetch('/save-note', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: currentNoteId, title, content: text })
+      body: JSON.stringify({ id: currentNoteId, title, content: html, content_json: json })
     });
-    const result = await response.json();
+    let result;
+    try {
+      result = await response.json();
+    } catch (e) {
+      alert('Session expired or server error. Please log in again.');
+      window.location.href = '/login';
+      return;
+    }
     if (result.success) {
       alert('Note saved!');
       saveBtn.classList.remove('highlighted');
-      // If new note, update currentNoteId if backend returns it
       if (!currentNoteId && result.id) {
         currentNoteId = result.id;
-        // Optionally update URL
         window.history.replaceState({}, document.title, `?note_id=${result.id}`);
       }
     } else {
-      alert('Failed to save.');
+      alert('Failed to save. ' + (result.error || ''));
     }
   } catch (err) {
     alert('Save error: ' + err.message);
   }
 });
+
+
 
 // Set editor content and title from backend if available
 if (window.noteContent) {

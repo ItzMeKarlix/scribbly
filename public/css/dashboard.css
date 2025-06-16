@@ -213,7 +213,7 @@ a {
 
 .content {
   flex: 1;
-  padding: 20px;
+  /* padding: 20px; */
   height: 100vh;
   overflow-y: auto;
 }
@@ -224,6 +224,7 @@ a {
   align-items: center;
   margin-bottom: 10px;
   color: gray;
+  padding: 20px;
 }
 
 .actions button {
@@ -281,9 +282,6 @@ a {
   color: inherit; 
 }
 
-
-
-
 /* Notes Grid and Card Styles */
 .notes-content {
   flex: 1;
@@ -293,23 +291,43 @@ a {
 }
 .notes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 18px;
   margin-top: 10px;
+  align-items: start; /* Make cards align to the top, allowing different heights */
 }
+
+/* Masonry effect for grid: let cards fill vertical space naturally */
+@media (min-width: 900px) {
+  .notes-grid {
+    grid-auto-flow: dense;
+  }
+}
+
+.notes-masonry {
+  display: flex;
+  gap: 18px;
+  margin: 0 40px;
+}
+
+.notes-masonry-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .note-card {
   background: var(--card-bg);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: 0 2px 12px rgba(200,180,120,0.08);
   border: 1.5px solid var(--border);
   display: flex;
   flex-direction: column;
-  min-height: 180px;
-  max-height: 220px;
-  height: 200px;
-  overflow: hidden;
   transition: box-shadow 0.18s, border 0.18s;
   position: relative;
+  padding-bottom: 12px;
 }
 .note-card:hover {
   box-shadow: 0 6px 24px rgba(200,180,120,0.13);
@@ -318,19 +336,24 @@ a {
 .note-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 18px 20px 0 20px;
 }
 .note-card-title {
-  font-size: 18px;
+  padding-top: 5px;
+  font-size: 1em;
   font-weight: 700;
   color: var(--text-main);
 }
 .note-card-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-end;
   font-size: 22px;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 2px 8px;
   border-radius: 5px;
   transition: background 0.18s;
 }
@@ -338,27 +361,81 @@ a {
   background: var(--accent);
 }
 .note-card-body {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  text-align: left;
   padding: 10px 20px 0 20px;
   color: var(--text-secondary);
   font-size: 15px;
 }
+
+.note-card-body.expanded {
+  max-height: none;
+}
+
+
 .note-card-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  padding: 14px 20px 16px 20px;
+  padding: 14px 20px 0 20px;
 }
-.note-card-avatars {
-  display: flex;
-  gap: 6px;
-}
+
 .note-card-tags {
   display: flex;
   gap: 6px;
 }
+
+.icon-button {
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  margin: 0;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button span.material-icons {
+  font-size: 1.3em;
+  transition: color 0.3s ease;
+}
+
+.icon-button.edit {
+  color: #222;
+}
+.icon-button.delete {
+  color: #222;
+}
+
+/* Hover effects */
+.icon-button.edit:hover {
+  background-color: rgba(59, 130, 246, 0.1); /* Light blue background */
+  color: #3b82f6; /* Tailwind blue-500 */
+}
+
+.icon-button.edit:hover span.material-icons {
+  color: #3b82f6;
+}
+
+.icon-button.delete:hover {
+  background-color: rgba(239, 68, 68, 0.1); /* Light red background */
+  color: #ef4444; /* Tailwind red-500 */
+}
+
+.icon-button.delete:hover span.material-icons {
+  color: #ef4444;
+}
+
+@media (max-width: 900px) {
+  .notes-masonry {
+    flex-direction: column;
+  }
+  .notes-masonry-col {
+    width: 100%;
+  }
+}
+
+

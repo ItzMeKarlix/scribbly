@@ -67,6 +67,24 @@ get '/workspace' => sub {
     $c->render(template => 'protected/workspace', username => $username, note_title => $note_title, note_content => $note_content);
 };
 
+get '/workspace-edit' => sub {
+    my $c = shift;
+    return $c->redirect_to('/login') unless $c->session('user_id');
+    my $user_id = $c->session('user_id');
+    my $note_id = $c->param('note_id');
+    my $dbh = Model::connect();
+    my $sth = $dbh->prepare("SELECT username FROM users WHERE id = ?");
+    $sth->execute($user_id);
+    my ($username) = $sth->fetchrow_array;
+    my ($note_title, $note_content);
+    if ($note_id) {
+        my $note_sth = $dbh->prepare('SELECT title, content FROM notes WHERE id = ? AND user_id = ?');
+        $note_sth->execute($note_id, $user_id);
+        ($note_title, $note_content) = $note_sth->fetchrow_array;
+    }
+    $c->render(template => 'protected/workspace_edit', username => $username, note_title => $note_title, note_content => $note_content);
+};
+
 get '/dashboard' => sub {
     my $c = shift;
     return $c->redirect_to('/login') unless $c->session('user_id');

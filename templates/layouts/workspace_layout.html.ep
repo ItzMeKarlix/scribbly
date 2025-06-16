@@ -13,7 +13,7 @@
 <body>
   %= content
   <script>
-    window.noteContent = "<%= $note_content // '' %>";
+    window.noteContent = `<%== $note_content // '' %>`;
     window.noteTitle = "<%= $note_title // '' %>";
   </script>
   <script type="module" src="js/new_workspace.js"></script>
