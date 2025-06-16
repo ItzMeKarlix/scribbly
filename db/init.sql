@@ -4,4 +4,11 @@
 --     password TEXT NOT NULL
 -- );
 
-DELETE FROM users;
+-- DELETE FROM users;
+
+CREATE TABLE `notes` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `user_id` INTEGER REFERENCES users(id),
+  `content` TEXT,
+  `updated_at` DATE
+);

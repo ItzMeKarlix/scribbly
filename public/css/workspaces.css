@@ -6,16 +6,14 @@
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
   height: 100%;
-  font-family: "Poppins", sans-serif;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
+body, .container {
+  height: 100vh;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 a {
@@ -23,18 +21,12 @@ a {
   color: inherit;
 }
 
-button:disabled {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: not-allowed;
-  filter: grayscale(100%);
-}
-
-
 .container {
   display: flex;
   width: 100%;
+  height: 100vh;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 /* Sidebar UI */
@@ -46,6 +38,11 @@ button:disabled {
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  position: relative;
+  overflow: visible;
+  flex-shrink: 0;
+  z-index: 10;
 }
 
 .profile {
@@ -73,6 +70,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .profile-text h3 {
@@ -94,7 +92,7 @@ button:disabled {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 100px;
+  padding: 10px 109px;
   border-radius: 6px;
   cursor: pointer;
   transition: 
@@ -218,6 +216,8 @@ button:disabled {
 .content {
   flex: 1;
   padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .top-bar {
@@ -237,9 +237,16 @@ button:disabled {
   border-radius: 4px;
 }
 
-.actions .download {
-  background-color: #007bff !important;
-  color: white !important;
+.actions button.highlighted {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .editor-toolbar {

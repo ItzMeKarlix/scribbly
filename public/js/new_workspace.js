@@ -51,14 +51,19 @@ let hasEdited = false
 const printBtn = document.querySelector('.print')
 const shareBtn = document.querySelector('.share')
 const downloadBtn = document.querySelector('.download')
+const saveBtn = document.querySelector('.save')
 
 // Enable buttons only after the user edits
 editor.on('update', () => {
-  if (!hasEdited && editor.getText().trim() !== '') {
-    hasEdited = true
-    printBtn.disabled = false
-    shareBtn.disabled = false
-    downloadBtn.disabled = false
+  const hasText = editor.getText().trim() !== '';
+  printBtn.disabled = !hasText;
+  shareBtn.disabled = !hasText;
+  downloadBtn.disabled = !hasText;
+  saveBtn.disabled = !hasText;
+  if (hasText) {
+    saveBtn.classList.add('highlighted');
+  } else {
+    saveBtn.classList.remove('highlighted');
   }
 })
 
@@ -98,3 +103,24 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(link.href)
 })
 
+saveBtn.addEventListener('click', async () => {
+  const text = editor.getText();
+  if (text.trim() === '') return;
+  try {
+    const response = await fetch('/save-note', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: text })
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Note saved!');
+      saveBtn.classList.remove('highlighted');
+      // Optionally keep save enabled for further edits
+    } else {
+      alert('Failed to save.');
+    }
+  } catch (err) {
+    alert('Save error: ' + err.message);
+  }
+})

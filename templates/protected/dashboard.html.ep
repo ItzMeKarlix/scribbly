@@ -4,16 +4,12 @@
   <aside class="sidebar">
     <div class="profile">
       <div class="profile-info">
-        <img src="img/avatar.png" alt="Profile" class="avatar" />
         <div class="profile-text">
-          <h3>Karl Eriel Atabay</h3>
-          <p>
-            <a href="mailto:karleriel.atabay@cvsu.edu.ph">karleriel.atabay@cvsu.edu.ph</a>
-          </p>
+            <h3><%= $username %></h3>
         </div>
       </div>
       <button class="new-project-btn">
-        <span class="material-icons">add</span> New Project
+        <span class="material-icons">add</span> New Note
       </button>
     </div>
 
