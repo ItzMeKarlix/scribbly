@@ -12,6 +12,6 @@
 </head>
 <body>
   %= content
-
+  <script type="module" src="js/new_workspace.js"></script>
 </body>
 </html>

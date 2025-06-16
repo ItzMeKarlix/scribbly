@@ -23,6 +23,14 @@ a {
   color: inherit;
 }
 
+button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+
 .container {
   display: flex;
   width: 100%;
@@ -273,6 +281,11 @@ a {
   vertical-align: middle;
   font-size: 18px;
   color: inherit; 
+}
+
+.editor-toolbar button.active {
+  background-color: #007bff;
+  color: white;
 }
 
 .ProseMirror {
