@@ -5,10 +5,12 @@
 -- );
 
 -- DELETE FROM users;
+-- DROP TABLE IF EXISTS notes;
 
 CREATE TABLE `notes` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
   `user_id` INTEGER REFERENCES users(id),
+  `title` varchar(255) NOT NULL,
   `content` TEXT,
   `updated_at` DATE
 );

@@ -51,16 +51,29 @@ let hasEdited = false
 const printBtn = document.querySelector('.print')
 const shareBtn = document.querySelector('.share')
 const downloadBtn = document.querySelector('.download')
-const saveBtn = document.querySelector('.save')
+const saveBtn = document.querySelector('.save');
+const titleInput = document.getElementById('note-title');
+const newNoteBtn = document.querySelector('.new-project-btn');
 
 // Enable buttons only after the user edits
 editor.on('update', () => {
   const hasText = editor.getText().trim() !== '';
+  const hasTitle = titleInput.value.trim() !== '';
   printBtn.disabled = !hasText;
   shareBtn.disabled = !hasText;
   downloadBtn.disabled = !hasText;
-  saveBtn.disabled = !hasText;
-  if (hasText) {
+  saveBtn.disabled = !(hasText && hasTitle);
+  if (hasText && hasTitle) {
+    saveBtn.classList.add('highlighted');
+  } else {
+    saveBtn.classList.remove('highlighted');
+  }
+});
+titleInput.addEventListener('input', () => {
+  const hasText = editor.getText().trim() !== '';
+  const hasTitle = titleInput.value.trim() !== '';
+  saveBtn.disabled = !(hasText && hasTitle);
+  if (hasText && hasTitle) {
     saveBtn.classList.add('highlighted');
   } else {
     saveBtn.classList.remove('highlighted');
@@ -103,24 +116,80 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(link.href)
 })
 
+let currentNoteId = null;
+
+// When editing a note, set currentNoteId from URL
+function getNoteIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('note_id');
+}
+
+// On page load, set currentNoteId if editing
+currentNoteId = getNoteIdFromUrl();
+
+// When loading a note for editing, set the fields and currentNoteId
+if (window.noteContent) {
+  editor.commands.setContent(window.noteContent);
+}
+if (window.noteTitle) {
+  titleInput.value = window.noteTitle;
+}
+
+// On new note, clear currentNoteId so save will create a new note
+newNoteBtn.addEventListener('click', () => {
+  currentNoteId = null;
+  titleInput.value = '';
+  editor.commands.setContent('');
+  saveBtn.disabled = true;
+  saveBtn.classList.remove('highlighted');
+  // Remove note_id from URL
+  window.history.replaceState({}, document.title, window.location.pathname);
+});
+
+// Update save logic to only create new note if currentNoteId is null, otherwise edit
 saveBtn.addEventListener('click', async () => {
-  const text = editor.getText();
-  if (text.trim() === '') return;
+  const title = titleInput.value;
+  const text = editor.getHTML();
+  if (text.trim() === '' || title.trim() === '') return;
   try {
     const response = await fetch('/save-note', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: text })
+      body: JSON.stringify({ id: currentNoteId, title, content: text })
     });
     const result = await response.json();
     if (result.success) {
       alert('Note saved!');
       saveBtn.classList.remove('highlighted');
-      // Optionally keep save enabled for further edits
+      // If new note, update currentNoteId if backend returns it
+      if (!currentNoteId && result.id) {
+        currentNoteId = result.id;
+        // Optionally update URL
+        window.history.replaceState({}, document.title, `?note_id=${result.id}`);
+      }
     } else {
       alert('Failed to save.');
     }
   } catch (err) {
     alert('Save error: ' + err.message);
   }
+});
+
+// Set editor content and title from backend if available
+if (window.noteContent) {
+  editor.commands.setContent(window.noteContent);
+}
+if (window.noteTitle) {
+  titleInput.value = window.noteTitle;
+}
+
+// NEW NOTE
+newNoteBtn.addEventListener('click', () => {
+  titleInput.value = '';
+  editor.commands.setContent('');
+  saveBtn.disabled = true;
+  saveBtn.classList.remove('highlighted');
 })
+
+// Initial load
+// Removed loadNotesList() call as it's no longer needed

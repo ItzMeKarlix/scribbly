@@ -249,6 +249,16 @@ a {
   cursor: not-allowed;
 }
 
+.note-title-input {
+  font-size:1.3em;
+  border:none;
+  background:transparent;
+  outline:none;
+  width:50%;
+  color:#333;
+}
+
+
 .editor-toolbar {
   display: flex;
   gap: 8px;

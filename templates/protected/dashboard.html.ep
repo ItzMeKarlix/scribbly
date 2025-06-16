@@ -17,19 +17,19 @@
       <ul class="menu">
         <li style="--i: 1"><span class="material-icons">search</span>Search</li>
         <li style="--i: 2"><a href="/dashboard"><span class="material-icons">home</span>Dashboard</a></li>
-        <li style="--i: 2"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
+        <li style="--i: 3"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
         <li style="--i: 4"><span class="material-icons">check</span>Tasks</li>
         <li class="projects" style="--i: 5">
-		  <div class="project-header" onclick="toggleProjects()">
-		    <span class="material-icons">folder</span> Projects
-		  </div>
-		  <ul class="sub-projects">
-		    <li><span class="dot red"></span> Project Note 1</li>
-		    <li><span class="dot blue"></span> Project Note 2</li>
-		    <li><span class="dot cyan"></span> Project Note 3</li>
-		    <li><span class="dot yellow"></span> Project Note 4</li>
-		  </ul>
-		</li>
+	  <div class="project-header" onclick="toggleProjects()">
+	    <span class="material-icons">folder</span> Projects
+	  </div>
+	  <ul class="sub-projects">
+	    <li><span class="dot red"></span> Project Note 1</li>
+	    <li><span class="dot blue"></span> Project Note 2</li>
+	    <li><span class="dot cyan"></span> Project Note 3</li>
+	    <li><span class="dot yellow"></span> Project Note 4</li>
+	  </ul>
+	</li>
       </ul>
     </nav>
   </aside>
@@ -40,30 +40,58 @@
       <p>Dashboard</p>
       <div class="actions">
         <button></button>
-
       </div>
     </div>
 
-    <!-- Notes Grid (optional static demo notes shown) -->
+    <!-- Notes Grid -->
     <div class="notes-grid">
-      <div class="note-card" style="background:#e9eafc;">
-        <div class="note-card-header">
-          <span class="note-card-title">Sample Note</span>
-          <span class="note-card-menu">⋮</span>
-        </div>
-        <div class="note-card-body">
-          <p>This is an example note inside the workspace layout.</p>
-        </div>
-        <div class="note-card-footer">
-          <div class="note-card-avatars">
-            <img src="https://via.placeholder.com/28" class="note-avatar" />
+      % for my $note (@$notes) {
+        <div class="note-card" style="background:#e9eafc;">
+          <div class="note-card-header">
+            <span class="note-card-title"><%= $note->{title} || '(No Title)' %></span>
+            <button class="note-card-delete-btn" data-id="<%= $note->{id} %>" title="Delete" style="background:none;border:none;cursor:pointer;"><span class="material-icons">delete</span></button>
           </div>
-          <div class="note-card-tags">
-            <span class="tag">Demo</span>
+          <div class="note-card-body">
+            <div class="note-preview" style="all:unset;">
+              <%== $note->{content} %>
+            </div>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-avatars">
+              <img src="https://via.placeholder.com/28" class="note-avatar" />
+            </div>
+            <div class="note-card-tags">
+              <button class="edit-note-btn" data-id="<%= $note->{id} %>">Edit</button>
+            </div>
           </div>
         </div>
-      </div>
+      % }
     </div>
 
   </main>
 </div>
+<script>
+// Delete button logic for note cards
+const deleteBtns = document.querySelectorAll('.note-card-delete-btn');
+deleteBtns.forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const id = btn.getAttribute('data-id');
+    if (confirm('Delete this note?')) {
+      fetch('/delete-note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      }).then(() => location.reload());
+    }
+    e.stopPropagation();
+  });
+});
+// Edit button logic
+const editBtns = document.querySelectorAll('.edit-note-btn');
+editBtns.forEach(btn => {
+  btn.addEventListener('click', function() {
+    const id = btn.getAttribute('data-id');
+    window.location.href = `/workspace?note_id=${id}`;
+  });
+});
+</script>
