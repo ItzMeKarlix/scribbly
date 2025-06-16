@@ -1,5 +1,5 @@
 % layout 'workspace_layout';
-% title 'Scribbly Workspace';
+% title 'Workspace';
 
 <div class="container">
   <aside class="sidebar">
@@ -23,8 +23,8 @@
     <nav>
       <ul class="menu">
         <li style="--i: 1"><span class="material-icons">search</span>Search</li>
-        <li style="--i: 2"><span class="material-icons">home</span>Home</li>
-        <li style="--i: 3"><span class="material-icons">note</span>Notes</li>
+        <li style="--i: 2"><a href="/dashboard"><span class="material-icons">home</span>Dashboard</a></li>
+        <li style="--i: 2"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
         <li style="--i: 4"><span class="material-icons">check</span>Tasks</li>
         <li class="projects" style="--i: 5">
 		  <div class="project-header" onclick="toggleProjects()">
@@ -43,7 +43,7 @@
 
   <main class="content">
 	  <div class="top-bar">
-	    <p>Projects / Project Name 1 / Scribbly Workspace</p>
+	    <p>Your Note</p>
 	    <div class="actions">
 	      <button><span class="material-icons">print</span> Print</button>
 	      <button><span class="material-icons">share</span> Share</button>
@@ -58,6 +58,24 @@
 		  <button data-cmd="toggleHeading" data-level="2">H₂</button>
 		  <button data-cmd="toggleHeading" data-level="3">H₃</button>
 		</div>
-		<div id="editor"></div>
+		<div id="editor" ></div>
   </main>
+    <script type="module">
+    import { Editor } from 'https://esm.sh/@tiptap/core@2.0.3'
+    import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.3'
+    import Placeholder from 'https://esm.sh/@tiptap/extension-placeholder@2.0.3'
+
+    new Editor({
+      element: document.querySelector('#editor'),
+      extensions: [
+        StarterKit,
+        Placeholder.configure({
+          placeholder: 'Write your own thoughts...',
+          emptyEditorClass: 'is-editor-empty',
+        }),
+      ],
+      content: '', // must be empty for placeholder to show
+    });
+  </script>
+
 </div>

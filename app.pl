@@ -55,4 +55,10 @@ get '/workspace' => sub {
     $c->render(template => 'protected/workspace');
 };
 
+get '/dashboard' => sub {
+    my $c = shift;
+    return $c->redirect_to('/login') unless $c->session('user_id');
+    $c->render(template => 'protected/dashboard');
+};
+
 app->start;

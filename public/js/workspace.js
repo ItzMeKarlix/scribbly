@@ -1,11 +1,24 @@
 import { Editor } from 'https://esm.sh/@tiptap/core@2.0.3'
-import StarterKit from 'https://esm.sh/@tiptap  /starter-kit@2.0.3'
+import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.3'
+import Placeholder from 'https://esm.sh/@tiptap/extension-placeholder@2.0.3'
 
-const editor = new Editor({
-  element: document.querySelector('#editor'),
-  extensions: [StarterKit],
-  content: '<p>Write your own thoughts...</p>',
-})
+// // Create editor instance (but don't mount yet)
+// const editor = new Editor({
+//   extensions: [
+//     StarterKit,
+//     Placeholder.configure({
+//       placeholder: 'Write your own thoughts...',
+//       emptyEditorClass: 'is-editor-empty',
+//     }),
+//   ],
+//   content: '', // must be empty for placeholder
+// })
+
+// // Mount editor to #editor container
+// const container = document.querySelector('#editor')
+// container.appendChild(editor.options.element)
+// editor.createNodeViews()
+
 
 document.querySelectorAll('.editor-toolbar button').forEach(button => {
   button.addEventListener('click', () => {
