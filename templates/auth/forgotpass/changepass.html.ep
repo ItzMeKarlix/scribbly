@@ -1,0 +1,29 @@
+% layout 'default_layout';
+% title 'Change Password';
+
+<div class="login-container">
+  <div class="left-section">
+    <img src="img/loginphoto.png" alt="registration placeholder">
+  </div>
+  <div class="right-section">
+    <div class="login-box">
+      <h1>Set a New Password</h1>
+      <form method="POST" action="/changepass">
+        <input type="hidden" name="username" value="<%= $username %>" />
+        <div class="input-group">
+          <input type="password" name="new_password" placeholder="New Password" required pattern="(?=.*[A-Z])[A-Za-z0-9]+" title="Alphanumeric, must include at least one capital letter" />
+        </div>
+        <div class="input-group">
+          <input type="password" name="confirm_password" placeholder="Confirm New Password" required />
+          % if (flash('error')) {
+              <div style="color: #d32f2f; font-weight: bold;">Password must be the same</div>
+          % }
+        </div>
+
+        <button type="submit" class="login-btn">Change Password</button>
+      </form>
+      <hr/>
+      <p>Remembered your password? <a href="/login" >Login here</a>.</p>
+    </div>
+  </div>
+</div>

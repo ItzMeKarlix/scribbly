@@ -1,0 +1,24 @@
+% layout 'default_layout';
+% title 'Forgot Password';
+
+<div class="login-container">
+  <div class="left-section">
+    <img src="img/loginphoto.png" alt="registration placeholder">
+  </div>
+  <div class="right-section">
+    <div class="login-box">
+      <h1>Recover your account?</h1>
+      <form method="POST" action="/searchuser">
+        <div class="input-group">
+          <input type="text" name="username" placeholder="Username"/>
+          % if (flash('error')) {
+            <div style="color: #d32f2f; margin-bottom: 12px; font-weight: bold;">Username does not exist</div>
+          % }
+        </div>
+        <button type="submit" class="login-btn">Search</button>
+      </form>
+      <hr/>
+      <p>Remembered your password? <a href="/login" >Login here</a>.</p>
+    </div>
+  </div>
+</div>

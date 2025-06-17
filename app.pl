@@ -14,6 +14,9 @@ get '/' => sub {
 
 get '/register' => sub {
     my $c = shift;
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->stash(security_questions => $questions);
     $c->render(template => 'auth/register');
 };
 
@@ -31,6 +34,12 @@ post '/register' => sub {
     if (Model::user_exists($username)) {
         return $c->render(text => 'User already exists.');
     }
+
+    # Save security question and answer (only 1)
+    my $question = $c->param('security_question_1');
+    my $answer   = $c->param('security_answer_1');
+    require SecurityQuestions;
+    SecurityQuestions::save_user_security($username, [$question], [$answer]);
 
     Model::create_user($username, $password);
     $c->redirect_to('/login');
@@ -55,6 +64,77 @@ post '/login' => sub {
     } else {
         $c->render(text => 'Invalid credentials.');
     }
+};
+
+get '/searchuser' => sub {
+    my $c = shift;
+    $c->render(template => 'auth/forgotpass/searchuser');
+};
+
+post '/searchuser' => sub {
+    my $c = shift;
+    my $username = $c->param('username');
+    if (!Model::user_exists($username)) {
+        $c->flash(error => 'There is no account found.');
+        return $c->redirect_to('/searchuser');
+    }
+    $c->stash(username => $username);
+    $c->redirect_to('/forgotpassword?username=' . $username);
+};
+
+get '/forgotpassword' => sub {
+    my $c = shift;
+    require SecurityQuestions;
+    my $username = $c->param('username');
+    my $questions = SecurityQuestions::get_user_questions($username);
+    $c->stash(username => $username, user_questions => $questions);
+    $c->render(template => 'auth/forgotpass/forgotpassword');
+};
+
+post '/forgotpassword' => sub {
+    my $c = shift;
+    require SecurityQuestions;
+    my $username = $c->param('username');
+    my $user_answer = $c->param('security_answer_1');
+    $username ||= $c->stash('username') || $c->param('user');
+    unless ($username) {
+        $c->flash(error => 'No username provided.');
+        return $c->redirect_to('/searchuser');
+    }
+    # Validate answer (only 1)
+    if (SecurityQuestions::validate_user_answers($username, [$user_answer])) {
+        $c->redirect_to('/changepass?username=' . $username);
+    } else {
+        $c->flash(error => 'Incorrect answer. Please try again.');
+        $c->redirect_to('/forgotpassword?username=' . $username);
+    }
+};
+
+get '/changepass' => sub {
+    my $c = shift;
+    my $username = $c->param('username');
+    $c->stash(username => $username);
+    $c->render(template => 'auth/forgotpass/changepass');
+};
+
+post '/changepass' => sub {
+    my $c = shift;
+    my $username = $c->param('username');
+    my $new_password = $c->param('new_password');
+    my $confirm_password = $c->param('confirm_password');
+    unless ($new_password && $confirm_password && $new_password eq $confirm_password) {
+        $c->flash(error => 'Passwords do not match.');
+        return $c->redirect_to('/changepass?username=' . $username);
+    }
+    unless ($new_password =~ /^(?=.*[A-Z])[A-Za-z0-9]+$/) {
+        $c->flash(error => 'Password must be alphanumeric and contain at least one capital letter.');
+        return $c->redirect_to('/changepass?username=' . $username);
+    }
+    my $hashed = Digest::SHA::sha1_hex($new_password);
+    my $dbh = Model::connect();
+    $dbh->do('UPDATE users SET password = ? WHERE username = ?', undef, $hashed, $username);
+    $c->flash(error => 'Password changed successfully. Please log in.');
+    $c->redirect_to('/login');
 };
 
 get '/logout' => sub {
