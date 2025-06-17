@@ -20,7 +20,13 @@ get '/register' => sub {
 post '/register' => sub {
     my $c = shift;
     my $username = $c->param('username');
-    my $password = sha1_hex($c->param('password'));
+    my $raw_password = $c->param('password');
+
+    # Password must be alphanumeric and contain at least one capital letter
+    unless ($raw_password =~ /^(?=.*[A-Z])[A-Za-z0-9]+$/) {
+        return $c->render(text => 'Password must be alphanumeric and contain at least one capital letter.');
+    }
+    my $password = sha1_hex($raw_password);
 
     if (Model::user_exists($username)) {
         return $c->render(text => 'User already exists.');
@@ -32,6 +38,8 @@ post '/register' => sub {
 
 get '/login' => sub {
     my $c = shift;
+    # If already logged in, redirect to workspace
+    return $c->redirect_to('/workspace') if $c->session('user_id');
     $c->render(template => 'auth/login');
 };
 
@@ -49,8 +57,19 @@ post '/login' => sub {
     }
 };
 
+get '/logout' => sub {
+    my $c = shift;
+    $c->session(expires => 1); # Clear session    $c->res->headers->cache_control('no-store, no-cache, must-revalidate, max-age=0');
+    $c->res->headers->header('Pragma' => 'no-cache');
+    $c->redirect_to('/login');
+};
+
+
 get '/workspace' => sub {
     my $c = shift;
+    $c->res->headers->cache_control('no-store, no-cache, must-revalidate, max-age=0');
+    $c->res->headers->header('Pragma' => 'no-cache');
+    $c->res->headers->expires(0);
     return $c->redirect_to('/login') unless $c->session('user_id');
     my $user_id = $c->session('user_id');
     my $note_id = $c->param('note_id');
@@ -86,6 +105,9 @@ get '/workspace' => sub {
 
 get '/workspace-new' => sub {
     my $c = shift;
+    $c->res->headers->cache_control('no-store, no-cache, must-revalidate, max-age=0');
+    $c->res->headers->header('Pragma' => 'no-cache');
+    $c->res->headers->expires(0);
     return $c->redirect_to('/login') unless $c->session('user_id');
     my $user_id = $c->session('user_id');
     my $dbh = Model::connect();
@@ -99,6 +121,9 @@ get '/workspace-new' => sub {
 
 get '/dashboard' => sub {
     my $c = shift;
+    $c->res->headers->cache_control('no-store, no-cache, must-revalidate, max-age=0');
+    $c->res->headers->header('Pragma' => 'no-cache');
+    $c->res->headers->expires(0);
     return $c->redirect_to('/login') unless $c->session('user_id');
     my $user_id = $c->session('user_id');
     my $dbh = Model::connect();

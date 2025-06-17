@@ -211,6 +211,39 @@ a {
 .cyan { background-color: cyan; }
 .yellow { background-color: gold; }
 
+/* Logout button */
+
+.logout {
+  margin-top: auto;
+  background-color: transparent;
+  color: #444;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.logout:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #d32f2f;
+}
+
+.logout .material-icons {
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.logout:hover .material-icons {
+  color: #d32f2f;
+}
+
 /* Content Note Taking UI */
 
 .content {
