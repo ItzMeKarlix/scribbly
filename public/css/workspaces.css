@@ -66,27 +66,6 @@ a {
   margin-right: 12px; 
 }
 
-.profile-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.profile-text h3 {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin: 0;
-}
-
-.profile-text p,
-.profile-text a {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 2px 0 0 0;
-  text-decoration: none;  
-
-}
 
 .new-project-btn {
   background-color: #007bff;
@@ -118,27 +97,36 @@ a {
   list-style: none;
   padding: 0;
   margin: 0;
-  text-decoration: none;
 }
 
 .menu li {
   margin: 15px 0;
-  cursor: pointer;
-  gap: 8px;
   opacity: 0;
   transform: translateX(-20px);
   animation: slideIn 0.5s ease forwards;
   animation-delay: calc(var(--i) * 0.1s);
+  transition: transform 0.3s;
+}
+
+.menu a {
+  color: inherit;
+  text-decoration: none;
   display: flex;
-  transition: color 0.3s, transform 0.3s;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s;
 }
 
-.menu li:hover {
+.menu li:hover a {
   color: #007bff;
-  transform: translateX(5px);
 }
 
-.menu li .material-icons {
+.menu a.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.menu a .material-icons {
   margin-right: 8px;
   transition: transform 0.3s ease;
 }
@@ -153,63 +141,6 @@ a {
     transform: translateX(0);
   }
 }
-
-/* Projects folder */
-.projects {
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  transform: translateX(-20px);
-  animation: slideIn 0.5s ease forwards;
-  animation-delay: calc(var(--i) * 0.1s);
-  
-}
-
-/* Project header - now inline like other items */
-.project-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-/* Sub-projects hidden initially */
-.sub-projects {
-  margin-left: 26px;
-  margin-top: 5px;
-  font-size: 0.95em;
-  color: #333;
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.4s ease, opacity 0.3s ease;
-  pointer-events: none;
-}
-  
-/* Show sub-projects when active */
-.projects.active .sub-projects {
-  max-height: 500px;
-  opacity: 1;
-  pointer-events: all;
-}
-
-.sub-projects li {
-  margin: 4px 0;
-  display: flex;
-  align-items: center;
-}
-
-.dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.red { background-color: red; }
-.blue { background-color: blue; }
-.cyan { background-color: cyan; }
-.yellow { background-color: gold; }
 
 /* Logout button */
 

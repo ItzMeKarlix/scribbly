@@ -19,3 +19,15 @@
   <script type="module" src="js/new_workspace.js"></script>
 </body>
 </html>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll(".menu a");
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>

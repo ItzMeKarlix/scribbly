@@ -188,6 +188,23 @@ post '/save-note' => sub {
     }
 };
 
+get '/trash' => sub {
+    my $c = shift;
+    $c->res->headers->cache_control('no-store, no-cache, must-revalidate, max-age=0');
+    $c->res->headers->header('Pragma' => 'no-cache');
+    $c->res->headers->expires(0);
+    return $c->redirect_to('/login') unless $c->session('user_id');
+    my $user_id = $c->session('user_id');
+    my $dbh = Model::connect();
+    my $sth = $dbh->prepare("SELECT username FROM users WHERE id = ?");
+    $sth->execute($user_id);
+    my ($username) = $sth->fetchrow_array;
+    my $notes_sth = $dbh->prepare('SELECT id, title, content, updated_at FROM notes WHERE user_id = ? ORDER BY updated_at DESC');
+    $notes_sth->execute($user_id);
+    my $notes = $notes_sth->fetchall_arrayref({});
+    $c->render(template => 'protected/trash', username => $username, notes => $notes);
+};
+
 # Delete note endpoint
 post '/delete-note' => sub {
     my $c = shift;
