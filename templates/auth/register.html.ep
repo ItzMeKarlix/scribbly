@@ -20,6 +20,16 @@
             </button>
           </div>
         </div>
+        <div class="input-group">
+          <label for="security_question_1">Password Recovery Question:</label>
+          <select name="security_question_1" id="security_question_1" required>
+            <option value="">-- Select a question --</option>
+            % for my $q (@{$security_questions}) {
+              <option value="<%= $q %>"><%= $q %></option>
+            % }
+          </select>
+          <input type="text" name="security_answer_1" placeholder="Answer" required />
+        </div>
         <button type="submit" class="login-btn">Sign Up</button>
       </form>
       <hr/>
@@ -46,4 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+
+
 </script>

@@ -129,6 +129,44 @@
   opacity: 0.9;
 }
 
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #444;
+  text-align: left;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.input-group select {
+  width: 100%;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 5px;
+  background: silver;
+  outline: none;
+  font-size: 1rem;
+  appearance: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='black' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  margin-bottom: 20px;
+}
+
+.input-group select:focus {
+  background-color: #e6e6e6;
+  box-shadow: 0 0 0 3px rgba(102, 0, 148, 0.2);
+}
+
+.input-group select:hover {
+  background-color: #dcdcdc;
+}
+
+
 
 hr {
   color: lightgray;
