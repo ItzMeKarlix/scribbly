@@ -5,7 +5,7 @@
   <aside class="sidebar">
     <div class="profile">
       <div class="profile-info">
-            <h1>Welcome, <%= ucfirst($username) %>!</h1>
+        <h1>Welcome, <%= ucfirst($username) %>!</h1>
       </div>
       <button class="new-project-btn" onclick="window.location.href='/workspace-new'">
         <span class="material-icons">add</span> New Note
@@ -14,22 +14,13 @@
 
     <nav>
       <ul class="menu">
-        <ul class="menu">
-          <li style="--i: 1">
-            <a href="/dashboard"><span class="material-icons">home</span>Dashboard</a>
-          </li>
-          <li style="--i: 2">
-            <a href="/workspace"><span class="material-icons">note</span>Notes</a>
-          </li>
-          <li style="--i: 3">
-            <a href="/tasks"><span class="material-icons">check</span>Tasks</a>
-          </li>
-          <li style="--i: 4">
-            <a href="/trash"><span class="material-icons">delete</span>Trash</a>
-          </li>
-        </ul>
+        <li style="--i: 1"><a href="/dashboard"><span class="material-icons">home</span>Dashboard</a></li>
+        <li style="--i: 2"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
+        <li style="--i: 3"><a href="/tasks"><span class="material-icons">check</span>Tasks</a></li>
+        <li style="--i: 4"><a href="/trash"><span class="material-icons">delete</span>Trash</a></li>
       </ul>
     </nav>
+
     <button class="logout" onclick="window.location.href='/logout'">
       <span class="material-icons">logout</span> Logout
     </button>
@@ -38,35 +29,46 @@
   <!-- Main Content -->
   <main class="content">
     <div class="top-bar">
-      <p>Dashboard</p>
+      <p>Trash</p>
       <div class="actions">
-        <button>Restore all Notes</button>
-        <button id="undo-all-btn" style="background:#f44336;color:white;">Permanently Delete All  Notes</button>
+        %= form_for '/restore-all-notes' => (method => 'POST') => begin
+          <button type="submit">Restore All Notes</button>
+        %= end
+
+        %= form_for '/delete-all-trashed-notes' => (method => 'POST') => begin
+          <button type="submit" style="background:#f44336;color:white;">Permanently Delete All</button>
+        %= end
       </div>
     </div>
 
-    <!-- Masonry Notes Grid -->
+    <!-- Masonry Trash Notes Grid -->
     <div class="notes-masonry">
-      % if ($notes && @$notes) {
+      % if ($trashed_notes && @$trashed_notes) {
         % my $num_cols = 4;
-        % my @sorted_notes = sort { ($b->{updated_at} // '') cmp ($a->{updated_at} // '') } @$notes;
         % my @cols = map { [] } 1..$num_cols;
-        % for (my $i = 0; $i < @sorted_notes; $i++) {
-          % push @{$cols[$i % $num_cols]}, $sorted_notes[$i];
+        % for (my $i = 0; $i < @$trashed_notes; $i++) {
+          % push @{$cols[$i % $num_cols]}, $trashed_notes->[$i];
         % }
         % for (my $col = 0; $col < $num_cols; $col++) {
           <div class="notes-masonry-col">
             % for my $note (@{$cols[$col]}) {
-              <div class="note-card" style="background:#e9eafc;">
+              <div class="note-card" style="background:#fff4f4;">
                 <div class="note-card-header">
                   <span class="note-card-title"><%= $note->{title} %></span>
                   <span class="note-card-menu">
-                    <button class="icon-button edit" onclick="editNote('<%= $note->{id} %>')" title="Edit">
-                    <span class="material-icons">edit</span>
-                    </button>
-                    <button class="icon-button delete" onclick="deleteNote('<%= $note->{id} %>')" title="Delete">
-                    <span class="material-icons">delete</span>
-                    </button>
+                    %= form_for '/restore-note' => (method => 'POST') => begin
+                      <input type="hidden" name="id" value="<%= $note->{id} %>">
+                      <button type="submit" class="icon-button restore" title="Restore">
+                        <span class="material-icons">restore</span>
+                      </button>
+                    %= end
+
+                    %= form_for '/delete-forever' => (method => 'POST') => begin
+                      <input type="hidden" name="id" value="<%= $note->{id} %>">
+                      <button type="submit" class="icon-button delete" title="Delete Forever">
+                        <span class="material-icons">delete_forever</span>
+                      </button>
+                    %= end
                   </span>
                 </div>
                 <div class="note-card-body">
@@ -74,7 +76,11 @@
                 </div>
                 <div class="note-card-footer">
                   <div class="note-card-tags">
-                    <span class="tag" style="font-size: .8em;">Updated: <%= $note->{updated_at} %></span>
+                    <span class="tag" style="font-size:.8em;">Deleted At: <%= $note->{deleted_at} %></span><br />
+                    % use Time::Piece;
+                    % my $deleted = Time::Piece->strptime($note->{deleted_at}, '%Y-%m-%d %H:%M:%S');
+                    % my $expires = $deleted + (7 * 24 * 60 * 60);  # 7 days in seconds
+                    <span class="tag" style="font-size:.8em;">Expires: <%= $expires->strftime('%Y-%m-%d %H:%M:%S') %></span>
                   </div>
                 </div>
               </div>
@@ -82,35 +88,8 @@
           </div>
         % }
       % } else {
-        <div>No notes yet. Click 'New Note' to get started!</div>
+        <div>No trashed notes yet.</div>
       % }
     </div>
-
   </main>
 </div>
-<script>
-function editNote(id) {
-  window.location.href = '/workspace?note_id=' + id;
-}
-async function deleteNote(id) {
-  if (!confirm('Delete this note?')) return;
-  const res = await fetch('/delete-note', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id })
-  });
-  const result = await res.json();
-  if (result.success) {
-    location.reload();
-  } else {
-    alert('Delete failed.');
-  }
-}
-document.getElementById('undo-all-btn').onclick = async function() {
-  if (!confirm('This will permanently delete ALL your notes. Continue?')) return;
-  const res = await fetch('/delete-all-notes', { method: 'POST' });
-  const result = await res.json();
-  if (result.success) location.reload();
-  else alert('Failed to delete all notes.');
-}
-</script>

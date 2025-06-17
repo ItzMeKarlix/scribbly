@@ -273,37 +273,183 @@ get '/trash' => sub {
     $c->res->headers->cache_control('no-store, no-cache, must-revalidate, max-age=0');
     $c->res->headers->header('Pragma' => 'no-cache');
     $c->res->headers->expires(0);
+
     return $c->redirect_to('/login') unless $c->session('user_id');
     my $user_id = $c->session('user_id');
+
     my $dbh = Model::connect();
-    my $sth = $dbh->prepare("SELECT username FROM users WHERE id = ?");
-    $sth->execute($user_id);
-    my ($username) = $sth->fetchrow_array;
-    my $notes_sth = $dbh->prepare('SELECT id, title, content, updated_at FROM notes WHERE user_id = ? ORDER BY updated_at DESC');
-    $notes_sth->execute($user_id);
-    my $notes = $notes_sth->fetchall_arrayref({});
-    $c->render(template => 'protected/trash', username => $username, notes => $notes);
+
+    # Get username
+    my $user_sth = $dbh->prepare("SELECT username FROM users WHERE id = ?");
+    $user_sth->execute($user_id);
+    my ($username) = $user_sth->fetchrow_array;
+
+    # Get trashed notes
+    my $trash_sth = $dbh->prepare('
+        SELECT id, title, content, deleted_at, original_updated_at
+        FROM trash
+        WHERE user_id = ?
+        ORDER BY deleted_at DESC
+    ');
+    $trash_sth->execute($user_id);
+    my $trashed_notes = $trash_sth->fetchall_arrayref({});
+
+    # Render the trash view with trashed notes
+    $c->render(template => 'protected/trash', username => $username, trashed_notes => $trashed_notes);
 };
 
-# Delete note endpoint
+
 post '/delete-note' => sub {
-    my $c = shift;
-    return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
-    my $user_id = $c->session('user_id');
-    my $id = $c->req->json->{id};
-    my $dbh = Model::connect();
-    $dbh->do('DELETE FROM notes WHERE id = ? AND user_id = ?', undef, $id, $user_id);
-    $c->render(json => { success => 1 });
+  my $c = shift;
+
+  my $user_id = $c->session('user_id');
+  my $id = $c->param('id');
+
+  return $c->redirect_to('/login') unless $user_id;
+
+  # Fetch the note
+  my $sth = $c->db->prepare('SELECT * FROM notes WHERE id = ? AND user_id = ?');
+  $sth->execute($id, $user_id);
+  my $note = $sth->fetchrow_hashref;
+
+  unless ($note) {
+    $c->flash(error => 'Note not found.');
+    return $c->redirect_to('/dashboard');
+  }
+
+  # Insert into trash
+  my $insert = $c->db->prepare('INSERT INTO trash (user_id, note_id, title, content, deleted_at, original_updated_at) VALUES (?, ?, ?, ?, datetime("now"), ?)');
+  $insert->execute($user_id, $note->{id}, $note->{title}, $note->{content}, $note->{updated_at});
+
+  # Delete from notes
+  my $delete = $c->db->prepare('DELETE FROM notes WHERE id = ? AND user_id = ?');
+  $delete->execute($id, $user_id);
+
+  $c->flash(message => 'Note moved to trash.');
+  return $c->redirect_to('/dashboard');
 };
 
-# Delete all notes for the current user
+
 post '/delete-all-notes' => sub {
-    my $c = shift;
-    return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
-    my $user_id = $c->session('user_id');
-    my $dbh = Model::connect();
-    $dbh->do('DELETE FROM notes WHERE user_id = ?', undef, $user_id);
-    $c->render(json => { success => 1 });
+  my $c = shift;
+
+  my $user_id = $c->session('user_id');
+  return $c->redirect_to('/login') unless $user_id;
+
+  # Fetch all notes
+  my $sth = $c->db->prepare('SELECT * FROM notes WHERE user_id = ?');
+  $sth->execute($user_id);
+  my $notes = $sth->fetchall_arrayref({});
+
+  unless (@$notes) {
+    $c->flash(error => 'No notes to delete.');
+    return $c->redirect_to('/dashboard');
+  }
+
+  # Insert each note into trash
+  my $insert = $c->db->prepare('INSERT INTO trash (user_id, note_id, title, content, deleted_at, original_updated_at) VALUES (?, ?, ?, ?, datetime("now"), ?)');
+  for my $note (@$notes) {
+    $insert->execute($user_id, $note->{id}, $note->{title}, $note->{content}, $note->{updated_at});
+  }
+
+  # Delete all notes
+  my $delete = $c->db->prepare('DELETE FROM notes WHERE user_id = ?');
+  $delete->execute($user_id);
+
+  $c->flash(message => 'All notes moved to trash.');
+  return $c->redirect_to('/dashboard');
 };
+
+# Restore a single note from trash
+post '/restore-note' => sub {
+    my $c        = shift;
+    my $user_id  = $c->session('user_id') // return $c->redirect_to('/login');
+    my $note_id  = $c->param('id');
+
+    my $dbh = Model::connect();
+
+    # Fetch trashed note
+    my $sth = $dbh->prepare('SELECT * FROM trash WHERE id = ? AND user_id = ?');
+    $sth->execute($note_id, $user_id);
+    my $note = $sth->fetchrow_hashref;
+
+    unless ($note) {
+        return $c->redirect_to('/trash');
+    }
+
+    # Insert back to notes
+    my $insert = $dbh->prepare('
+        INSERT INTO notes (user_id, title, content, updated_at)
+        VALUES (?, ?, ?, ?)
+    ');
+    $insert->execute($user_id, $note->{title}, $note->{content}, $note->{original_updated_at});
+
+    # Delete from trash
+    $dbh->do('DELETE FROM trash WHERE id = ? AND user_id = ?', undef, $note_id, $user_id);
+
+    return $c->redirect_to('/trash');
+};
+
+# Permanently delete a single trashed note
+post '/delete-forever' => sub {
+    my $c       = shift;
+    my $user_id = $c->session('user_id') // return $c->redirect_to('/login');
+    my $note_id = $c->param('id');
+
+    my $dbh = Model::connect();
+
+    # Just delete from trash
+    $dbh->do('DELETE FROM trash WHERE id = ? AND user_id = ?', undef, $note_id, $user_id);
+
+    return $c->redirect_to('/trash');
+};
+
+# Restore all notes from trash
+post '/restore-all-notes' => sub {
+    my $c       = shift;
+    my $user_id = $c->session('user_id') // return $c->redirect_to('/login');
+
+    my $dbh = Model::connect();
+
+    # Fetch all trash
+    my $sth = $dbh->prepare('SELECT * FROM trash WHERE user_id = ?');
+    $sth->execute($user_id);
+    my $trashed_notes = $sth->fetchall_arrayref({});
+
+    # Reinsert into notes
+    my $insert = $dbh->prepare('
+        INSERT INTO notes (user_id, title, content, updated_at)
+        VALUES (?, ?, ?, ?)
+    ');
+    foreach my $note (@$trashed_notes) {
+        $insert->execute($user_id, $note->{title}, $note->{content}, $note->{original_updated_at});
+    }
+
+    # Clear trash
+    $dbh->do('DELETE FROM trash WHERE user_id = ?', undef, $user_id);
+
+    return $c->redirect_to('/trash');
+};
+
+# Permanently delete all trashed notes
+post '/delete-all-trashed-notes' => sub {
+    my $c       = shift;
+    my $user_id = $c->session('user_id') // return $c->redirect_to('/login');
+
+    my $dbh = Model::connect();
+
+    # Delete all trash for this user
+    $dbh->do('DELETE FROM trash WHERE user_id = ?', undef, $user_id);
+
+    return $c->redirect_to('/trash');
+};
+
+
+
+
+sub cleanup_trash {
+  my $c = shift;
+  $c->db->delete('trash', \["deleted_at < NOW() - INTERVAL '7 days'"]);
+}
 
 app->start;
