@@ -1,6 +1,6 @@
 # 📝 Scribbly — A Simple Note-Taking App
 
-Scribbly is a lightweight note-taking web app built with **Perl (Dancer2)** and designed to help you jot down your ideas anytime, anywhere.
+Scribbly is a lightweight note-taking web app built with **Perl (Mojolicious)** and designed to help you jot down your ideas anytime, anywhere.
 
 ---
 
