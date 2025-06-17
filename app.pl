@@ -385,4 +385,68 @@ post '/change-username' => sub {
     $c->render(json => { success => 1, new_username => $new_username });
 };
 
+# Change security question/answer from settings modal (AJAX)
+post '/change-security-question' => sub {
+    my $c = shift;
+    return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
+    my $user_id = $c->session('user_id');
+    my $data = $c->req->json;
+    my $question = $data->{question};
+    my $answer = $data->{answer};
+    unless ($question && $answer) {
+        return $c->render(json => { success => 0, error => 'Both question and answer are required.' });
+    }
+    # Get username for this user_id
+    my $dbh = Model::connect();
+    my $sth = $dbh->prepare('SELECT username FROM users WHERE id = ?');
+    $sth->execute($user_id);
+    my ($username) = $sth->fetchrow_array;
+    unless ($username) {
+        return $c->render(json => { success => 0, error => 'User not found.' });
+    }
+    eval {
+        require SecurityQuestions;
+        SecurityQuestions::save_user_security($username, [$question], [$answer]);
+    };
+    if ($@) {
+        return $c->render(json => { success => 0, error => 'Failed to update security question.' });
+    }
+    $c->render(json => { success => 1 });
+};
+
+# Delete account from settings modal (AJAX)
+post '/delete-account' => sub {
+    my $c = shift;
+    return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
+    my $user_id = $c->session('user_id');
+    my $data = $c->req->json;
+    my $confirmation = $data->{confirmation} // '';
+    my $dbh = Model::connect();
+    my $sth = $dbh->prepare('SELECT username FROM users WHERE id = ?');
+    $sth->execute($user_id);
+    my ($username) = $sth->fetchrow_array;
+    my $expected = 'I want to delete ' . $username;
+    unless ($confirmation eq $expected) {
+        return $c->render(json => { success => 0, error => 'Confirmation phrase does not match.' });
+    }
+    # Delete user notes
+    $dbh->do('DELETE FROM notes WHERE user_id = ?', undef, $user_id);
+    # Delete user from users table
+    $dbh->do('DELETE FROM users WHERE id = ?', undef, $user_id);
+    # Remove from security_questions.json
+    eval {
+        require SecurityQuestions;
+        my $file = 'security_questions.json';
+        if (-e $file) {
+            use JSON;
+            use File::Slurp;
+            my $data = decode_json(read_file($file));
+            delete $data->{$username};
+            write_file($file, encode_json($data));
+        }
+    };
+    $c->session(expires => 1); # Log out
+    $c->render(json => { success => 1 });
+};
+
 app->start;

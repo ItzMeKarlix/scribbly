@@ -205,35 +205,39 @@ a {
 
 /* Settings UI */
 
-.settings {
-  background-color: transparent;
-  color: #444;
+.floating-settings {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1050; /* Higher than modal backdrop */
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
   border: none;
-  padding: 12px;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(0, 123, 255, 0.3);
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s, color 0.3s;
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  animation: popIn 0.4s ease-out both;
 }
 
-.settings:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #007bff;
+.floating-settings:hover {
+  transform: scale(1.1) rotate(10deg);
+  background-color: #0056b3;
+  box-shadow: 0 12px 22px rgba(0, 123, 255, 0.4);
+}
+.floating-settings:active {
+  transform: scale(0.95);
+}
+.floating-settings .material-icons {
+  font-size: 24px;
+  transition: transform 0.3s;
 }
 
-.settings:hover .material-icons {
-  transform: rotate(20deg); /* rotate only the icon */
-  color: #007bff;
-}
-
-.settings .material-icons {
-  font-size: 22px;
-  transition: transform 0.3s ease, color 0.3s ease;
-  transform: rotate(0deg); /* ensure it starts unrotated */
-}
-
-.settings:hover .material-icons {
-  color: #007bff;
-}
 
 /* Content Note Taking UI */
 
@@ -467,74 +471,193 @@ a {
 
 /* modal css */
 
+hr {
+  margin: 20px 0px;
+}
+
+
+
+/* Modal backdrop */
+
 .settings-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
   z-index: 1000;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.25);
 }
-.settings-modal.hidden { display: none; }
+.settings-modal.hidden {
+  display: none;
+}
+
+/* Modal content */
 .settings-modal-content {
   background: #fff;
-  border-radius: 12px;
-  padding: 36px 32px 24px 32px;
-  min-width: 350px;
-  max-width: 95vw;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  border-radius: 10px;
+  padding: 16px;
+  width: 900px;
+  max-width: 95%;
+  max-height: 90vh;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  animation: fadeIn 0.25s ease-out;
+  overflow: hidden;
 }
-.settings-modal-content h2 { margin-top: 0; }
-.settings-section { margin-bottom: 18px; }
-.settings-section.danger h3 { color: #d32f2f; }
-.settings-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 10px; }
+
+/* Modal Header */
+.settings-modal-content h2 {
+  text-align: center;
+  font-size: 1.25em;
+  margin: 0 0 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Close Button */
+.settings-modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 1.5em;
+  color: #999;
+  cursor: pointer;
+}
+.settings-modal-content .close:hover {
+  color: #d32f2f;
+}
+
+/* Form wrapper */
+.settings-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+/* Section */
+.settings-section {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.95em;
+}
+.settings-section h3 {
+  font-size: 1em;
+  margin-bottom: 6px;
+}
+.settings-section.danger {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+.settings-section.danger h3 {
+  margin: 0;
+  flex: 1;
+}
+.settings-section.danger .delete-account-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Inputs */
+.settings-section input,
+.settings-section select {
+  font-size: 0.95em;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+  margin-bottom: 6px;
+}
+.settings-section input:focus,
+.settings-section select:focus {
+  outline: 2px solid #007bff;
+  background: #fff;
+}
+
+/* Buttons */
+.save-settings-btn,
+.delete-account-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.95em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 .save-settings-btn {
   background: #007bff;
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 24px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
 }
-.save-settings-btn:hover { background: #0056b3; }
+.save-settings-btn:hover {
+  background: #0056b3;
+}
 .delete-account-btn {
   background: #f44336;
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 24px;
+}
+.delete-account-btn:hover {
+  background: #d32f2f;
+}
+
+/* Button row for confirmation */
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+/* Feedback */
+#settings-feedback {
+  text-align: center;
   font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
+  margin-top: 6px;
+  font-size: 0.95em;
 }
-.delete-account-btn:hover { background: #d32f2f; }
-.settings-modal-content .close {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 2em;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.settings-modal-content .close:hover { color: #d32f2f; }
-.settings-modal-content input, .settings-modal-content select {
-  width: 100%;
-  padding: 10px 12px;
-  margin: 8px 0 0 0;
-  border: 1px solid #ccc;
+
+#cancel-delete-btn {
+  padding: 6px 12px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #555;
+  background-color: #e0e0e0;
+  border: none;
   border-radius: 5px;
-  font-size: 1em;
-  background: #f7f7f7;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-.settings-modal-content input:focus, .settings-modal-content select:focus {
-  outline: 2px solid #007bff;
-  background: #fff;
+
+#cancel-delete-btn:hover {
+  background-color: #d5d5d5;
+  color: #222;
+}
+
+#cancel-delete-btn:active {
+  background-color: #c1c1c1;
+}
+
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings-body {
+    flex-direction: column;
+  }
+  .settings-section {
+    flex: 1 1 100%;
+  }
 }
