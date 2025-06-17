@@ -37,4 +37,20 @@ sub validate_login {
     return $sth->fetchrow_hashref;
 }
 
+# Add note save/update helper for future use
+sub save_note_for_user {
+    my ($user_id, $content) = @_;
+    my $dbh = Model::connect();
+    my $now = scalar localtime;
+    my $sth = $dbh->prepare('SELECT id FROM notes WHERE user_id = ?');
+    $sth->execute($user_id);
+    my ($note_id) = $sth->fetchrow_array;
+    if ($note_id) {
+        $dbh->do('UPDATE notes SET content = ?, updated_at = ? WHERE id = ?', undef, $content, $now, $note_id);
+    } else {
+        $dbh->do('INSERT INTO notes (user_id, content, updated_at) VALUES (?, ?, ?)', undef, $user_id, $content, $now);
+    }
+}
+
+
 1;

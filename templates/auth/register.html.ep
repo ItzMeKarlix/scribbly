@@ -3,23 +3,47 @@
 
 <div class="login-container">
   <div class="left-section">
-    <!-- Optional: You can add content here if needed -->
+    <img src="img/loginphoto.png" alt="registration placeholder">
   </div>
   <div class="right-section">
     <div class="login-box">
       <h1>Write with us!</h1>
       <form method="POST" action="/register">
         <div class="input-group">
-          <input type="text" name="username" placeholder="Username" required />
+          <input type="text" name="username" placeholder="Username"/>
         </div>
-        <div class="input-group">
-          <input type="password" name="password" placeholder="Password" required />
+        <div class="input-group password-group">
+          <div class="password-wrapper">
+            <input type="password" name="password" id="register-password" placeholder="Password" required pattern="(?=.*[A-Z])[A-Za-z0-9]+" title="Alphanumeric, must include at least one capital letter" />
+            <button type="button" id="toggle-password" class="toggle-password-btn" aria-label="Show password">
+              <span class="material-icons" id="toggle-password-icon">visibility</span>
+            </button>
+          </div>
         </div>
         <button type="submit" class="login-btn">Sign Up</button>
       </form>
       <hr/>
-      <p>Already have an account? <a href="/login">Login here</a>.</p>
+      <p>Already have an account? <a href="/login" >Login here</a>.</p>
     </div>
   </div>
 </div>
 
+<!-- onclick="alert('User has been added successfully')" -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const pwInput = document.getElementById('register-password');
+  const toggleBtn = document.getElementById('toggle-password');
+  const icon = document.getElementById('toggle-password-icon');
+  if (pwInput && toggleBtn && icon) {
+    toggleBtn.addEventListener('click', function() {
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        pwInput.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    });
+  }
+});
+</script>

@@ -19,7 +19,7 @@
 }
 
 .left-section {
-/*  background-image: url("3.jpg");*/
+  background-image: url("loginphoto.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -56,7 +56,47 @@
   border-radius: 5px;
   background: silver;
   outline: none;
-  font-size: 14px;
+  font-size: 1rem;
+}
+
+/* Password reveal button styling */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 44px; /* space for the icon */
+  height: 42px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.toggle-password-btn:hover {
+  transform: scale(1.2);
+  color: #007bff;
+}
+
+#toggle-password-icon {
+  font-size: 20px;
+  transition: opacity 0.2s ease;
 }
 
 .options {
@@ -89,6 +129,7 @@
   opacity: 0.9;
 }
 
+
 hr {
   color: lightgray;
   margin-top: 10px;
@@ -103,3 +144,4 @@ p a {
   text-decoration: none;
   color: darkblue;
 }
+

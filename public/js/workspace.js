@@ -29,5 +29,5 @@ document.querySelectorAll('.editor-toolbar button').forEach(button => {
 
 window.toggleProjects = function () {
   const projectsItem = document.querySelector('.projects')
-  projectsItem.classList.toggle('open')
+  projectsItem.classList.toggle('active')
 }

@@ -51,6 +51,18 @@ sub routes {
             $c->render(text => 'Invalid credentials.');
         }
     });
+    
+    $r->get('/dashboard')->to(cb => sub {
+        my $c = shift;
+        return $c->redirect_to('/login') unless $c->session('user_id');
+        $c->render(template => 'dashboard');
+    });
+
+    $r->get('/logout')->to(cb => sub {
+        my $c = shift;
+        $c->session(expires => 1);
+        $c->redirect_to('/login');
+    });
 
     $r->get('/dashboard')->to(cb => sub {
         my $c = shift;

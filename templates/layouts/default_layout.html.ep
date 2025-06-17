@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <title><%= title || 'Scribbly' %></title>
-  <link rel="stylesheet" href="/css/auth.css" />
+  <link rel="stylesheet" href="/css/authy.css" />
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body>
   %= content

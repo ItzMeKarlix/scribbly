@@ -1,30 +1,25 @@
 % layout 'workspace_layout';
-% title 'Scribbly Workspace';
+% title 'Workspace';
 
 <div class="container">
   <aside class="sidebar">
     <div class="profile">
       <div class="profile-info">
-        <img src="img/avatar.png" alt="Profile" class="avatar" />
         <div class="profile-text">
-          <h3>Karl Eriel Atabay</h3>
-          <p>
-            <a href="mailto:karleriel.atabay@cvsu.edu.ph">
-              karleriel.atabay@cvsu.edu.ph
-            </a>
+          <h3><%= $username %></h3>
           </p>
         </div>
       </div>
-      <button class="new-project-btn">
-        <span class="material-icons">add</span> New Project
+      <button class="new-project-btn" onclick="window.location.href='/workspace-new'">
+        <span class="material-icons">add</span> New Note
       </button>
     </div>
 
     <nav>
       <ul class="menu">
         <li style="--i: 1"><span class="material-icons">search</span>Search</li>
-        <li style="--i: 2"><span class="material-icons">home</span>Home</li>
-        <li style="--i: 3"><span class="material-icons">note</span>Notes</li>
+        <li style="--i: 2"><a href="/dashboard"><span class="material-icons">home</span>Dashboard</a></li>
+        <li style="--i: 2"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
         <li style="--i: 4"><span class="material-icons">check</span>Tasks</li>
         <li class="projects" style="--i: 5">
 		  <div class="project-header" onclick="toggleProjects()">
@@ -39,15 +34,19 @@
 		</li>
       </ul>
     </nav>
+    <button class="logout" onclick="window.location.href='/logout'">
+      <span class="material-icons">logout</span> Logout
+    </button>
   </aside>
 
   <main class="content">
 	  <div class="top-bar">
-	    <p>Projects / Project Name 1 / Scribbly Workspace</p>
+	    <input id="note-title" class="note-title-input" type="text" placeholder="Title...">
 	    <div class="actions">
-	      <button><span class="material-icons">print</span> Print</button>
-	      <button><span class="material-icons">share</span> Share</button>
-	      <button class="download"><span class="material-icons">download</span> Download</button>
+        <button class="print" disabled><span class="material-icons">print</span> Print</button>
+        <button class="share" disabled><span class="material-icons">share</span> Share</button>
+        <button class="download" disabled><span class="material-icons">download</span> Download</button>
+        <button class="save highlighted" disabled><span class="material-icons">save</span> Save</button>
 	    </div>
 	  </div>
 	  <div class="editor-toolbar">
@@ -60,4 +59,5 @@
 		</div>
 		<div id="editor"></div>
   </main>
+
 </div>

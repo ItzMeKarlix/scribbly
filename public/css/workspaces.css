@@ -1,0 +1,363 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body, .container {
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar UI */
+
+.sidebar {
+  width: 350px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ccc;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  overflow: visible;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px; 
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-text h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile-text p,
+.profile-text a {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 2px 0 0 0;
+  text-decoration: none;  
+
+}
+
+.new-project-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 109px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 
+    background-color 0.3s ease, 
+    box-shadow 0.3s ease, 
+    transform 0.2s ease;
+}
+
+/* Hover effect: lift and shadow */
+.new-project-btn:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 14px rgba(0, 123, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Click (active) effect: press down */
+.new-project-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+}
+
+.menu li {
+  margin: 15px 0;
+  cursor: pointer;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+  display: flex;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.menu li:hover {
+  color: #007bff;
+  transform: translateX(5px);
+}
+
+.menu li .material-icons {
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.menu li:hover .material-icons {
+  transform: scale(1.2);
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Projects folder */
+.projects {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.1s);
+  
+}
+
+/* Project header - now inline like other items */
+.project-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Sub-projects hidden initially */
+.sub-projects {
+  margin-left: 26px;
+  margin-top: 5px;
+  font-size: 0.95em;
+  color: #333;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  pointer-events: none;
+}
+  
+/* Show sub-projects when active */
+.projects.active .sub-projects {
+  max-height: 500px;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.sub-projects li {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.red { background-color: red; }
+.blue { background-color: blue; }
+.cyan { background-color: cyan; }
+.yellow { background-color: gold; }
+
+/* Logout button */
+
+.logout {
+  margin-top: auto;
+  background-color: transparent;
+  color: #444;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.logout:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #d32f2f;
+}
+
+.logout .material-icons {
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.logout:hover .material-icons {
+  color: #d32f2f;
+}
+
+/* Content Note Taking UI */
+
+.content {
+  flex: 1;
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: gray;
+}
+
+.actions button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.actions button.highlighted {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.note-title-input {
+  font-size:1.3em;
+  border:none;
+  background:transparent;
+  outline:none;
+  width:40%;
+  color:#333;
+}
+
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.editor-toolbar button {
+  padding: 6px 10px;
+  border: none;
+  background: #f2f2f2;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.editor-toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+.editor-toolbar button.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.editor-content h1 {
+  margin-bottom: 10px;
+}
+.content:focus {
+  outline: none;
+}
+.editor-content p {
+  line-height: 1.6;
+  color: #333;
+}
+
+.material-icons {
+  vertical-align: middle;
+  font-size: 18px;
+  color: inherit; 
+}
+
+.editor-toolbar button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.ProseMirror {
+  outline: none;
+}
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* .placeholder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #aaa;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hidden {
+  display: none;
+} */

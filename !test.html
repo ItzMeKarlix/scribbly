@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TipTap Placeholder</title>
+  <style>
+    #editor {
+      border: 1px solid #ccc;
+      padding: 10px;
+      min-height: 150px;
+      border-radius: 4px;
+    }
+    .ProseMirror {
+      outline: none;
+    }
+    .ProseMirror p.is-editor-empty:first-child::before {
+      content: attr(data-placeholder);
+      color: #aaa;
+      float: left;
+      height: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="editor"></div>
+
+<script type="module">
+  import { Editor } from 'https://esm.sh/@tiptap/core@2.0.3'
+  import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.0.3'
+  import Placeholder from 'https://esm.sh/@tiptap/extension-placeholder@2.0.3'
+
+  new Editor({
+    element: document.querySelector('#editor'),
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: 'Write your own thoughts...',
+        emptyEditorClass: 'is-editor-empty',
+      }),
+    ],
+    content: '', // must be empty for placeholder to show
+  });
+</script>
+
+</body>
+</html>

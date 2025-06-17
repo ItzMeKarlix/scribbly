@@ -1,0 +1,118 @@
+% layout 'dashboard_layout';
+% title 'Dashboard';
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="profile">
+      <div class="profile-info">
+        <div class="profile-text">
+            <h3><%= $username %></h3>
+        </div>
+      </div>
+      <button class="new-project-btn" onclick="window.location.href='/workspace-new'">
+        <span class="material-icons">add</span> New Note
+      </button>
+    </div>
+
+    <nav>
+      <ul class="menu">
+        <li style="--i: 1"><span class="material-icons">search</span>Search</li>
+        <li style="--i: 2"><a href="/dashboard"><span class="material-icons">home</span>Dashboard</a></li>
+        <li style="--i: 2"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
+        <li style="--i: 4"><span class="material-icons">check</span>Tasks</li>
+        <li class="projects" style="--i: 5">
+	  <div class="project-header" onclick="toggleProjects()">
+	    <span class="material-icons">folder</span> Projects
+	  </div>
+	  <ul class="sub-projects">
+	    <li><span class="dot red"></span> Project Note 1</li>
+	    <li><span class="dot blue"></span> Project Note 2</li>
+	    <li><span class="dot cyan"></span> Project Note 3</li>
+	    <li><span class="dot yellow"></span> Project Note 4</li>
+	  </ul>
+	</li>
+      </ul>
+    </nav>
+    <button class="logout" onclick="window.location.href='/logout'">
+      <span class="material-icons">logout</span> Logout
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <div class="top-bar">
+      <p>Dashboard</p>
+      <div class="actions">
+        <button id="undo-all-btn" style="background:#f44336;color:white;">Delete All Notes</button>
+      </div>
+    </div>
+
+    <!-- Masonry Notes Grid -->
+    <div class="notes-masonry">
+      % if ($notes && @$notes) {
+        % my $num_cols = 4;
+        % my @sorted_notes = sort { ($b->{updated_at} // '') cmp ($a->{updated_at} // '') } @$notes;
+        % my @cols = map { [] } 1..$num_cols;
+        % for (my $i = 0; $i < @sorted_notes; $i++) {
+          % push @{$cols[$i % $num_cols]}, $sorted_notes[$i];
+        % }
+        % for (my $col = 0; $col < $num_cols; $col++) {
+          <div class="notes-masonry-col">
+            % for my $note (@{$cols[$col]}) {
+              <div class="note-card" style="background:#e9eafc;">
+                <div class="note-card-header">
+                  <span class="note-card-title"><%= $note->{title} %></span>
+                  <span class="note-card-menu">
+                    <button class="icon-button edit" onclick="editNote('<%= $note->{id} %>')" title="Edit">
+                    <span class="material-icons">edit</span>
+                    </button>
+                    <button class="icon-button delete" onclick="deleteNote('<%= $note->{id} %>')" title="Delete">
+                    <span class="material-icons">delete</span>
+                    </button>
+                  </span>
+                </div>
+                <div class="note-card-body">
+                  <%== $note->{content} %>
+                </div>
+                <div class="note-card-footer">
+                  <div class="note-card-tags">
+                    <span class="tag" style="font-size: .8em;">Updated: <%= $note->{updated_at} %></span>
+                  </div>
+                </div>
+              </div>
+            % }
+          </div>
+        % }
+      % } else {
+        <div>No notes yet. Click 'New Note' to get started!</div>
+      % }
+    </div>
+
+  </main>
+</div>
+<script>
+function editNote(id) {
+  window.location.href = '/workspace?note_id=' + id;
+}
+async function deleteNote(id) {
+  if (!confirm('Delete this note?')) return;
+  const res = await fetch('/delete-note', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id })
+  });
+  const result = await res.json();
+  if (result.success) {
+    location.reload();
+  } else {
+    alert('Delete failed.');
+  }
+}
+document.getElementById('undo-all-btn').onclick = async function() {
+  if (!confirm('This will permanently delete ALL your notes. Continue?')) return;
+  const res = await fetch('/delete-all-notes', { method: 'POST' });
+  const result = await res.json();
+  if (result.success) location.reload();
+  else alert('Failed to delete all notes.');
+}
+</script>
