@@ -162,11 +162,21 @@ a {
   }
 }
 
+/* sidebar footer */
+
+.sidebar-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
   
 /* Logout button */
 
 .logout {
-  margin-top: auto;
   background-color: transparent;
   color: #444;
   border: none;
@@ -174,12 +184,9 @@ a {
   border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
 }
 
 .logout:hover {
@@ -197,6 +204,36 @@ a {
 }
 
 /* Settings UI */
+
+.settings {
+  background-color: transparent;
+  color: #444;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, color 0.3s;
+}
+
+.settings:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #007bff;
+}
+
+.settings:hover .material-icons {
+  transform: rotate(20deg); /* rotate only the icon */
+  color: #007bff;
+}
+
+.settings .material-icons {
+  font-size: 22px;
+  transition: transform 0.3s ease, color 0.3s ease;
+  transform: rotate(0deg); /* ensure it starts unrotated */
+}
+
+.settings:hover .material-icons {
+  color: #007bff;
+}
 
 /* Content Note Taking UI */
 
@@ -428,3 +465,76 @@ a {
 }
 
 
+/* modal css */
+
+.settings-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.25);
+}
+.settings-modal.hidden { display: none; }
+.settings-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 36px 32px 24px 32px;
+  min-width: 350px;
+  max-width: 95vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.settings-modal-content h2 { margin-top: 0; }
+.settings-section { margin-bottom: 18px; }
+.settings-section.danger h3 { color: #d32f2f; }
+.settings-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 10px; }
+.save-settings-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.save-settings-btn:hover { background: #0056b3; }
+.delete-account-btn {
+  background: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.delete-account-btn:hover { background: #d32f2f; }
+.settings-modal-content .close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 2em;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.settings-modal-content .close:hover { color: #d32f2f; }
+.settings-modal-content input, .settings-modal-content select {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 8px 0 0 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  background: #f7f7f7;
+}
+.settings-modal-content input:focus, .settings-modal-content select:focus {
+  outline: 2px solid #007bff;
+  background: #fff;
+}

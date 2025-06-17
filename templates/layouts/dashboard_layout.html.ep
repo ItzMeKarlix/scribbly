@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title><%= title || 'Scribbly' %></title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/dashboard.css"/>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <script src="https://esm.sh/@tiptap/core@2.0.3" type="module"></script>
   <script src="https://esm.sh/@tiptap/starter-kit@2.0.3" type="module"></script>
@@ -12,7 +12,7 @@
 </head>
 <body>
   %= content
-  <script type="module" src="js/workspace.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
 <script>

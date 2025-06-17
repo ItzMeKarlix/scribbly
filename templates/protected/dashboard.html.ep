@@ -30,10 +30,69 @@
         </ul>
       </ul>
     </nav>
+    <div class="sidebar-footer">
     <button class="logout" onclick="window.location.href='/logout'">
-      <span class="material-icons">logout</span> Logout
+        <span class="material-icons">logout</span> Logout
     </button>
+    <button class="settings" id="open-settings-modal" type="button">
+        <span class="material-icons">settings</span>
+    </button>
+    </div>
   </aside>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="settings-modal hidden">
+    <div class="settings-modal-content">
+      <span class="close" id="close-settings-modal">&times;</span>
+      <h2>Account Settings</h2>
+      <form id="settings-form">
+        <div class="settings-section">
+          <h3>Edit Username</h3>
+          <input type="text" id="edit-username" name="edit-username" value="<%= $username %>" pattern="[A-Za-z0-9]+" title="Alphanumeric only" required />
+        </div>
+        <hr/>
+        <div class="settings-section">
+          <h3>Change Password</h3>
+          <input type="password" id="current-password" name="current-password" placeholder="Current Password" required />
+          <input type="password" id="new-password" name="new-password" placeholder="New Password" pattern="(?=.*[A-Z])[A-Za-z0-9]+" title="Alphanumeric, must include at least one capital letter" required />
+          <input type="password" id="confirm-new-password" name="confirm-new-password" placeholder="Confirm New Password" required />
+        </div>
+        <hr/>
+        <div class="settings-section">
+          <h3>Change Security Question</h3>
+          <select id="security-question" name="security-question" required>
+            <option value="">-- Select a question --</option>
+            % for my $q (@{$security_questions}) {
+              <option value="<%= $q %>"><%= $q %></option>
+            % }
+          </select>
+          <input type="text" id="security-answer" name="security-answer" placeholder="Answer" required />
+        </div>
+        <hr/>
+        <div class="settings-section danger">
+          <h3>Delete Account</h3>
+          <button type="button" id="delete-account-btn" class="delete-account-btn">Delete Account</button>
+        </div>
+        <div class="settings-actions">
+          <button type="submit" class="save-settings-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-confirm-modal" class="settings-modal hidden">
+    <div class="settings-modal-content">
+      <span class="close" id="close-delete-confirm">&times;</span>
+      <h2>Confirm Account Deletion</h2>
+      <p>Type <b>I want to delete<%= $username %></b> to confirm account deletion. This action cannot be undone.</p>
+      <input type="text" id="delete-confirm-input" placeholder="Type confirmation phrase here..." />
+      <div class="settings-actions">
+        <button id="confirm-delete-btn" class="delete-account-btn">Delete Account</button>
+        <button id="cancel-delete-btn" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Content -->
   <main class="content">
@@ -87,29 +146,3 @@
 
   </main>
 </div>
-<script>
-function editNote(id) {
-  window.location.href = '/workspace?note_id=' + id;
-}
-async function deleteNote(id) {
-  if (!confirm('Delete this note?')) return;
-  const res = await fetch('/delete-note', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id })
-  });
-  const result = await res.json();
-  if (result.success) {
-    location.reload();
-  } else {
-    alert('Delete failed.');
-  }
-}
-document.getElementById('undo-all-btn').onclick = async function() {
-  if (!confirm('This will permanently delete ALL your notes. Continue?')) return;
-  const res = await fetch('/delete-all-notes', { method: 'POST' });
-  const result = await res.json();
-  if (result.success) location.reload();
-  else alert('Failed to delete all notes.');
-}
-</script>

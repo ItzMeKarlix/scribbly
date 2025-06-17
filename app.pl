@@ -180,7 +180,9 @@ get '/workspace' => sub {
             $c->session(last_note_id => undef);
         }
     }
-    $c->render(template => 'protected/workspace', username => $username, note_title => $note_title, note_content => $note_content);
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/workspace', username => $username, note_title => $note_title, note_content => $note_content, security_questions => $questions);
 };
 
 get '/workspace-new' => sub {
@@ -196,7 +198,9 @@ get '/workspace-new' => sub {
     my ($username) = $sth->fetchrow_array;
     # Always show a blank note and clear session
     $c->session(last_note_id => undef);
-    $c->render(template => 'protected/workspace', username => $username, note_title => '', note_content => '');
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/workspace', username => $username, note_title => '', note_content => '', security_questions => $questions);
 };
 
 get '/dashboard' => sub {
@@ -213,7 +217,9 @@ get '/dashboard' => sub {
     my $notes_sth = $dbh->prepare('SELECT id, title, content, updated_at FROM notes WHERE user_id = ? ORDER BY updated_at DESC');
     $notes_sth->execute($user_id);
     my $notes = $notes_sth->fetchall_arrayref({});
-    $c->render(template => 'protected/dashboard', username => $username, notes => $notes);
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/dashboard', username => $username, notes => $notes, security_questions => $questions);
 };
 
 # List all notes for the user
@@ -282,7 +288,9 @@ get '/trash' => sub {
     my $notes_sth = $dbh->prepare('SELECT id, title, content, updated_at FROM notes WHERE user_id = ? ORDER BY updated_at DESC');
     $notes_sth->execute($user_id);
     my $notes = $notes_sth->fetchall_arrayref({});
-    $c->render(template => 'protected/trash', username => $username, notes => $notes);
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/trash', username => $username, notes => $notes, security_questions => $questions);
 };
 
 # Delete note endpoint
@@ -304,6 +312,77 @@ post '/delete-all-notes' => sub {
     my $dbh = Model::connect();
     $dbh->do('DELETE FROM notes WHERE user_id = ?', undef, $user_id);
     $c->render(json => { success => 1 });
+};
+
+# Change password from settings modal (AJAX)
+post '/change-password' => sub {
+    my $c = shift;
+    return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
+    my $user_id = $c->session('user_id');
+    my $data = $c->req->json;
+    my $current_password = $data->{current_password};
+    my $new_password = $data->{new_password};
+    my $confirm_password = $data->{confirm_password};
+    unless ($new_password && $confirm_password && $new_password eq $confirm_password) {
+        return $c->render(json => { success => 0, error => 'Passwords do not match.' });
+    }
+    unless ($new_password =~ /^(?=.*[A-Z])[A-Za-z0-9]+$/) {
+        return $c->render(json => { success => 0, error => 'Password must be alphanumeric and contain at least one capital letter.' });
+    }
+    my $dbh = Model::connect();
+    my $sth = $dbh->prepare('SELECT password FROM users WHERE id = ?');
+    $sth->execute($user_id);
+    my ($hashed_current) = $sth->fetchrow_array;
+    use Digest::SHA qw(sha1_hex);
+    if (!$hashed_current || $hashed_current ne sha1_hex($current_password)) {
+        return $c->render(json => { success => 0, error => 'Current password is incorrect.' });
+    }
+    my $hashed_new = sha1_hex($new_password);
+    $dbh->do('UPDATE users SET password = ? WHERE id = ?', undef, $hashed_new, $user_id);
+    $c->render(json => { success => 1 });
+};
+
+# Change username from settings modal (AJAX)
+post '/change-username' => sub {
+    my $c = shift;
+    return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
+    my $user_id = $c->session('user_id');
+    my $data = $c->req->json;
+    my $new_username = $data->{new_username};
+    $new_username =~ s/^\s+|\s+$//g;
+    unless ($new_username && $new_username =~ /^[A-Za-z0-9]+$/) {
+        return $c->render(json => { success => 0, error => 'Username must be alphanumeric.' });
+    }
+    my $dbh = Model::connect();
+    my $sth = $dbh->prepare('SELECT id FROM users WHERE username = ?');
+    $sth->execute($new_username);
+    if (my $row = $sth->fetchrow_arrayref) {
+        return $c->render(json => { success => 0, error => 'Username already taken.' });
+    }
+    # Get old username
+    my $sth2 = $dbh->prepare('SELECT username FROM users WHERE id = ?');
+    $sth2->execute($user_id);
+    my ($old_username) = $sth2->fetchrow_array;
+    # Update username in users table
+    $dbh->do('UPDATE users SET username = ? WHERE id = ?', undef, $new_username, $user_id);
+    # Update session
+    $c->session(user_id => $user_id); # session stays the same
+    # Update security_questions.json if needed
+    eval {
+        require SecurityQuestions;
+        my $file = 'security_questions.json';
+        if (-e $file) {
+            use JSON;
+            use File::Slurp;
+            my $data = decode_json(read_file($file));
+            if ($data->{$old_username}) {
+                $data->{$new_username} = $data->{$old_username};
+                delete $data->{$old_username};
+                write_file($file, encode_json($data));
+            }
+        }
+    };
+    $c->render(json => { success => 1, new_username => $new_username });
 };
 
 app->start;
