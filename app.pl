@@ -180,7 +180,9 @@ get '/workspace' => sub {
             $c->session(last_note_id => undef);
         }
     }
-    $c->render(template => 'protected/workspace', username => $username, note_title => $note_title, note_content => $note_content);
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/workspace', username => $username, note_title => $note_title, note_content => $note_content, security_questions => $questions);
 };
 
 get '/workspace-new' => sub {
@@ -196,7 +198,9 @@ get '/workspace-new' => sub {
     my ($username) = $sth->fetchrow_array;
     # Always show a blank note and clear session
     $c->session(last_note_id => undef);
-    $c->render(template => 'protected/workspace', username => $username, note_title => '', note_content => '');
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/workspace', username => $username, note_title => '', note_content => '', security_questions => $questions);
 };
 
 get '/dashboard' => sub {
@@ -213,7 +217,9 @@ get '/dashboard' => sub {
     my $notes_sth = $dbh->prepare('SELECT id, title, content, updated_at FROM notes WHERE user_id = ? ORDER BY updated_at DESC');
     $notes_sth->execute($user_id);
     my $notes = $notes_sth->fetchall_arrayref({});
-    $c->render(template => 'protected/dashboard', username => $username, notes => $notes);
+    require SecurityQuestions;
+    my $questions = SecurityQuestions::available_questions();
+    $c->render(template => 'protected/dashboard', username => $username, notes => $notes, security_questions => $questions);
 };
 
 # List all notes for the user

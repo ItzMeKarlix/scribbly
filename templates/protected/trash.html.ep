@@ -22,8 +22,9 @@
     </nav>
 
     <button class="logout" onclick="window.location.href='/logout'">
-      <span class="material-icons">logout</span> Logout
+        <span class="material-icons">logout</span> Logout
     </button>
+    </div>
   </aside>
 
   <!-- Main Content -->
