@@ -16,7 +16,7 @@
       <ul class="menu">
         <li style="--i: 1"><a href="/dashboard"><span class="material-icons">home</span>Dashboard</a></li>
         <li style="--i: 2"><a href="/workspace"><span class="material-icons">note</span>Notes</a></li>
-        <li style="--i: 3"><a href="/tasks"><span class="material-icons">check</span>Tasks</a></li>
+        <!-- <li style="--i: 3"><a href="/tasks"><span class="material-icons">check</span>Tasks</a></li> -->
         <li style="--i: 4"><a href="/trash"><span class="material-icons">delete</span>Trash</a></li>
       </ul>
     </nav>
