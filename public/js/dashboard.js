@@ -1,4 +1,4 @@
-function editNote(id) {
+    function editNote(id) {
   window.location.href = '/workspace?note_id=' + id;
 }
 async function deleteNote(id) {

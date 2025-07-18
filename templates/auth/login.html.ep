@@ -7,13 +7,18 @@
   </div>
   <div class="right-section">
     <div class="login-box">
+      <img src="img/logo.png" alt="Scribbly Logo" style="width:80px;display:block;margin:0 auto 10px auto;">
+      <h1 style="margin-bottom:20px;  font-size:2.2em;font-weight:800;letter-spacing:1px;text-align:center;">SCRIBBLY</h1>
       <h1>Nice to see you again!</h1>
       <form method="POST" action="/login">
         <div class="input-group">
-          <input type="text" name="username" placeholder="Username" required />
+          <input type="text" name="username" placeholder="Username"  required />
         </div>
-        <div class="input-group">
-          <input type="password" name="password" placeholder="Password" required />
+        <div class="input-group" style="position:relative;">
+            <input type="password" name="password" placeholder="Password" id="password" style="padding-right:40px;" />
+            <button type="button" id="toggle-password" class="toggle-password-btn" aria-label="Show password" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; padding:0; margin:0; cursor:pointer; height:24px; width:24px; display:flex; align-items:center; justify-content:center;">
+              <span class="material-icons" id="toggle-password-icon">visibility</span>
+            </button>
         </div>
         <div class="options">
           <label>
@@ -29,3 +34,22 @@
     </div>
   </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const pwInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('toggle-password');
+  const icon = document.getElementById('toggle-password-icon');
+  if (pwInput && toggleBtn && icon) {
+    toggleBtn.addEventListener('click', function() {
+      if (pwInput.type === 'password') {
+        pwInput.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        pwInput.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    });
+  }
+});
+
+</script>

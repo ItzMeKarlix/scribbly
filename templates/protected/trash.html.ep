@@ -20,26 +20,29 @@
         <li style="--i: 4"><a href="/trash"><span class="material-icons">delete</span>Trash</a></li>
       </ul>
     </nav>
-
+    <div class="sidebar-footer">
     <button class="logout" onclick="window.location.href='/logout'">
         <span class="material-icons">logout</span> Logout
     </button>
+    </div>
   </aside>
 
   <!-- Main Content -->
   <main class="content">
     <div class="top-bar">
       <p>Trash</p>
-      <div class="actions">
-        %= form_for '/restore-all-notes' => (method => 'POST') => begin
-          <button type="submit">Restore All Notes</button>
+      <div class="actions" style="display:flex; gap:10px; align-items:center;">
+        %= form_for '/restore-all-notes' => (method => 'POST', style => 'margin:0;') => begin
+          <button type="submit" class="animated-btn">Restore All Notes</button>
         %= end
-
-        %= form_for '/delete-all-trashed-notes' => (method => 'POST') => begin
-          <button type="submit" style="background:#f44336;color:white;">Permanently Delete All</button>
+        %= form_for '/delete-all-trashed-notes' => (method => 'POST', style => 'margin:0;') => begin
+          <button type="submit" class="animated-btn" style="background:#f44336;color:white;">Permanently Delete All</button>
         %= end
       </div>
     </div>
+    <style>
+
+    </style>
 
     <!-- Masonry Trash Notes Grid -->
     <div class="notes-masonry">

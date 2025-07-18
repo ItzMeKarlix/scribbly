@@ -159,13 +159,13 @@ get '/workspace' => sub {
     my ($username) = $sth->fetchrow_array;
     my ($note_title, $note_content);
 
-    # If note_id is 'new', always show a blank note and clear session
+
     if (defined $note_id && $note_id eq 'new') {
         $note_title = '';
         $note_content = '';
         $c->session(last_note_id => undef);
     } else {
-        # Session-based last opened note
+
         if (!$note_id) {
             $note_id = $c->session('last_note_id');
         }
@@ -196,7 +196,7 @@ get '/workspace-new' => sub {
     my $sth = $dbh->prepare("SELECT username FROM users WHERE id = ?");
     $sth->execute($user_id);
     my ($username) = $sth->fetchrow_array;
-    # Always show a blank note and clear session
+
     $c->session(last_note_id => undef);
     require SecurityQuestions;
     my $questions = SecurityQuestions::available_questions();
@@ -222,7 +222,6 @@ get '/dashboard' => sub {
     $c->render(template => 'protected/dashboard', username => $username, notes => $notes, security_questions => $questions);
 };
 
-# List all notes for the user
 get '/notes-list' => sub {
     my $c = shift;
     return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');
@@ -234,7 +233,7 @@ get '/notes-list' => sub {
     $c->render(json => { success => 1, notes => $notes });
 };
 
-# Get a single note by id
+
 get '/note/:id' => sub {
     my $c = shift;
     return $c->render(json => { success => 0, error => 'Not logged in' }) unless $c->session('user_id');

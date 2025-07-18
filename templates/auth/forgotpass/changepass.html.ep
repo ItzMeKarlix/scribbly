@@ -11,13 +11,23 @@
       <form method="POST" action="/changepass">
         <input type="hidden" name="username" value="<%= $username %>" />
         <div class="input-group">
-          <input type="password" name="new_password" placeholder="New Password" required pattern="(?=.*[A-Z])[A-Za-z0-9]+" title="Alphanumeric, must include at least one capital letter" />
+          <div class="password-wrapper" style="position:relative;">
+            <input type="password" name="new_password" placeholder="New Password" id="change-password" pattern="(?=.*[A-Z])[A-Za-z0-9]+" title="Alphanumeric, must include at least one capital letter" style="padding-right:40px;" />
+            <button type="button" id="toggle-password-1" class="toggle-password-btn" aria-label="Show password" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; padding:0; margin:0; cursor:pointer; height:24px; width:24px; display:flex; align-items:center; justify-content:center;">
+              <span class="material-icons" id="toggle-password-icon-1">visibility</span>
+            </button>
+          </div>
         </div>
         <div class="input-group">
-          <input type="password" name="confirm_password" placeholder="Confirm New Password" required />
-          % if (flash('error')) {
-              <div style="color: #d32f2f; font-weight: bold;">Password must be the same</div>
-          % }
+          <div class="password-wrapper" style="position:relative;">
+            <input type="password" name="confirm_password" placeholder="Confirm New Password" id="confirm-password" required style="padding-right:40px;" />
+            <button type="button" id="toggle-password-2" class="toggle-password-btn" aria-label="Show password" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:transparent; border:none; padding:0; margin:0; cursor:pointer; height:24px; width:24px; display:flex; align-items:center; justify-content:center;">
+              <span class="material-icons" id="toggle-password-icon-2">visibility</span>
+            </button>
+            % if (flash('error')) {
+                <div style="color: #d32f2f; font-weight: bold;">Password must be the same</div>
+            % }
+          </div> 
         </div>
 
         <button type="submit" class="login-btn">Change Password</button>
@@ -27,3 +37,37 @@
     </div>
   </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle for new password
+  const pwInput1 = document.getElementById('change-password');
+  const toggleBtn1 = document.getElementById('toggle-password-1');
+  const icon1 = document.getElementById('toggle-password-icon-1');
+  if (pwInput1 && toggleBtn1 && icon1) {
+    toggleBtn1.addEventListener('click', function() {
+      if (pwInput1.type === 'password') {
+        pwInput1.type = 'text';
+        icon1.textContent = 'visibility_off';
+      } else {
+        pwInput1.type = 'password';
+        icon1.textContent = 'visibility';
+      }
+    });
+  }
+  // Toggle for confirm password
+  const pwInput2 = document.getElementById('confirm-password');
+  const toggleBtn2 = document.getElementById('toggle-password-2');
+  const icon2 = document.getElementById('toggle-password-icon-2');
+  if (pwInput2 && toggleBtn2 && icon2) {
+    toggleBtn2.addEventListener('click', function() {
+      if (pwInput2.type === 'password') {
+        pwInput2.type = 'text';
+        icon2.textContent = 'visibility_off';
+      } else {
+        pwInput2.type = 'password';
+        icon2.textContent = 'visibility';
+      }
+    });
+  }
+});
+</script>

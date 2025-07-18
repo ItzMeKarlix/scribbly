@@ -200,5 +200,3 @@ newNoteBtn.addEventListener('click', () => {
   saveBtn.classList.remove('highlighted');
 })
 
-// Initial load
-// Removed loadNotesList() call as it's no longer needed
